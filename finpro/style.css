@@ -1,0 +1,161 @@
+/* navbar */
+.navbar-brand img
+{
+    width: 55%;
+}
+
+.navbar
+{
+    background-color: #191970;
+}
+
+.navbar-light .navbar-nav .nav-link
+{
+    color: white;
+}
+/*font*/
+@import url(//db.onlinewebfonts.com/c/827d075b1538829cc0db75696e4d5fa2?family=Speedee);
+@font-face {
+    font-family: "Speedee";
+    src: url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.eot");
+    src: url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.eot?#iefix") format("embedded-opentype"), 
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.woff2") format("woff2"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.woff") format("woff"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.ttf") format("truetype"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.svg#Speedee") format("svg");
+}
+/*style body*/
+.formSec{
+    margin: 70px;
+    font-family: 'Speedee';
+    font-weight: normal;
+}
+
+
+#phraseCommande{
+    text-align: center;
+}
+
+.sbcCon{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 50px 0 50px 0;
+}
+
+.denreeCon{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgCon{
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 300px;
+    width: 250px;
+    border: 2px solid grey;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: 0.5s;
+}
+
+.imgCon:hover {
+    border: 4px solid #F9D252 ;
+    transition: 0.5s;
+}
+
+.nomDenree{
+    margin: 8px;
+}
+
+.denreeCon img{
+    width: 80%;
+    height: 80%;
+}
+
+.chipsheureCon{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.selectStyle{
+    text-align: center;
+    margin: 8px 0 8px 0;
+    height: 35px;
+    width: 150px;
+    background-color:#F9D252;
+    border-radius: 8px;
+    font-size: 1.3rem;
+}
+
+.chipsSelectCon{
+    display: flex;
+    justify-content:  center;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.chipsSelectCon div{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.selectStyleC{
+    margin: 8px 0 8px 0;
+    height: 35px;
+    width: 90px;
+    color:#F9D252;
+}
+
+#blue{
+    background-color: #191970;
+    color: white;
+    font-size: 1.3rem;
+}
+
+#blueN{
+    color: #191970;
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.heureCon{
+    display: flex;
+    flex-direction: column;
+}
+.heureCon input{
+    margin-top: 10px;
+    border-radius: 5px;
+    border : 2px solid#F9D252;
+}
+
+.heureCon h3{
+    font-size: 1.5rem;
+}
+
+.comments{
+    color: red;
+}
+/*Responsive*/
+@media (max-width: 800px) { 
+    body{
+        text-align: center;
+    }
+    .sbcCon,.chipsheureCon{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .heureCon input{
+        margin: 20px auto;
+        width: 50%;
+    }
+}
