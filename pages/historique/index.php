@@ -9,6 +9,7 @@
     if(date('m')){
         $annee += 1;
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -39,7 +40,7 @@
             <form action="" method="post" name="formFiltre">
                 <div class="infoCommande">
                     <label for="dateDebut">Période du </label>
-                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-09-01" name="dateDebut" class="saisieFiltre">
+                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -2;?>-09-01" name="dateDebut" class="saisieFiltre">
                     <label for="dateFin">au </label>
                     <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-01-01" name="dateFin" class="saisieFiltre">
                 </div>
@@ -54,6 +55,7 @@
                 <input class="btnForm1 textAlign" type="submit" name="submit" value="Appliquer le filtre">
             </form>
             <?php
+                $filtre = "";
                 if(isset($_POST['submit']))
                 {
                     $dateDebut = date($_POST['dateDebut']);
@@ -65,7 +67,8 @@
                     $query->bindParam('dateInsertion', $date);
                     $query->bindParam('id', $_SESSION['id']);
                     $query->execute();
-                    // echo var_dump(date($_POST['dateDebut']));
+                    //  Mise à jour du filtre
+                    $filtre = "AND C.date_heure_livraison_com >= $dateDebut AND C.date_heure_livraison_com <= $dateFin";
                 }
             ?>
         </section>
@@ -77,46 +80,50 @@
                     <th class="th textAlign"> Boisson </th>
                     <th class="th textAlign"> Dessert </th>
                     <th class="th textAlign"> Chips </th>
-                    <!-- <th class="th textAlign"> Date commande </th>
+                    <th class="th textAlign"> Date commande </th>
                     <th class="th textAlign"> Date livraison </th>
                     <th class="th textAlign"> Commande annulée </th>   
-                    <th class="th textAlign"> Actions </th>                 -->
+                    <th class="th textAlign"> Actions </th>                
                 </tr>
                 <?php
                     // Select nom sandwich 
-                    $reqSandwich = $co->prepare("SELECT * FROM sandwich INNER JOIN commande on sandwich.id_sandwich = commande.fk_sandwich_id");
-                    $reqSandwich->execute();
-                    $sandwich = $reqSandwich->fetch();
-
-                    $reqBoisson = $co->prepare("SELECT * FROM boisson INNER JOIN commande on boisson.id_boisson = commande.fk_boisson_id");
-                    $reqBoisson->execute();
-                    $boisson = $reqBoisson->fetch();
-
-                    $reqDessert = $co->prepare("SELECT * FROM dessert INNER JOIN commande on dessert.id_dessert = commande.fk_dessert_id");
-                    $reqDessert->execute();
-                    $dessert = $reqDessert->fetch();
-
-                    $reqAfficher = $co->prepare("SELECT * FROM commande WHERE id_com = 4");
+                    $reqAfficher = $co->prepare("
+                        SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
+                        FROM commande C, sandwich S, boisson B, dessert D
+                        WHERE C.fk_user_id = 1
+                        AND C.fk_sandwich_id = S.id_sandwich
+                        AND C.fk_boisson_id = B.id_boisson
+                        AND C.fk_dessert_id = D.id_dessert
+                        ORDER BY C.id_com" . $filtre);
                     $reqAfficher->execute();
-                    $afficher = $reqAfficher->fetch();
+                    $afficher = $reqAfficher->fetchAll();
 
                     foreach ($afficher as $resultat)
                     {
+                        if($resultat['chips_com'] == 1)
+                        {
+                            $chips = "oui";
+                        }else{ $chips = "non";}
+
+                        if($resultat['annule_com'] == 1)
+                        {
+                            $annule = "oui";
+                        }else{ $annule = "non";}
+
                         echo "<tr>";
-                            echo "<td class='tableau'>". $sandwich['nom_sandwich'] ."</td>";
-                            echo "<td class='tableau'>". $boisson['nom_boisson'] ."</td>";
-                            echo "<td class='tableau'>". $dessert['nom_dessert'] ."</td>";
+                            echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
+                            echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
+                            echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
+                            echo "<td class='tableau'>". $chips ."</td>";
+                            echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
+                            echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
+                            echo "<td class='tableau'>". $annule ."</td>";
+                            echo "<td class='tableau'>
+                                <input class='btnForm1 textAlign' value='Modifier' name='modifier' type='submit'>
+                                <input class='btnForm1 textAlign' value='Annuler' name='annuler' type='submit'>
+                            </td>";
                         echo "</tr>";
                     }
-                    // while ($row = $reqAfficher->fetch())
-                    // {
-                    //     echo "<tr>";
-                    //         echo "<td class='tableau'>". $sandwich['nom_sandwich'] ."</td>";
-                    //         echo "<td class='tableau'>". $boisson['nom_boisson'] ."</td>";
-                    //         echo "<td class='tableau'>". $dessert['nom_dessert'] ."</td>";
-                    //         // echo "<td class='tableau'>". $['nom_'] ."</td>";
-                    //     echo "</tr>";
-                    // }
                 ?>
             </table>
         </section>
