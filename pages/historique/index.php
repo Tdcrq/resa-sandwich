@@ -37,12 +37,18 @@
         </section>
 
         <section class="textAlign" id="filtre">
+            <?php 
+                $reqFiltre = $co->prepare("SELECT * FROM historique WHERE fk_user_id = :id");                
+                $reqFiltre->bindParam('id', $_SESSION['id']);
+                $reqFiltre->execute();
+                $reqFiltre = $reqFiltre->fetch();
+            ?>
             <form action="" method="post" name="formFiltre">
                 <div class="infoCommande">
                     <label for="dateDebut">Période du </label>
-                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -2;?>-09-01" name="dateDebut" class="saisieFiltre">
+                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -2;?>-09-01" name="dateDebut" class="saisieFiltre" value="<?php echo $reqFiltre['dateDebut_hist'];?>">
                     <label for="dateFin">au </label>
-                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-01-01" name="dateFin" class="saisieFiltre">
+                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-01-01" name="dateFin" class="saisieFiltre" value="<?php echo $reqFiltre['dateFin_hist'];?>">
                 </div>
                 <div class="infoOrdre">
                     <label for="ordre">Ordre : </label>
@@ -60,15 +66,21 @@
                 {
                     $dateDebut = date($_POST['dateDebut']);
                     $dateFin = date($_POST['dateFin']);
-                    $id = 1;
-                    $query = $co->prepare("UPDATE `historique` SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin, dateInsertion_hist = :dateInsertion, fk_user_id = :id");                
-                    $query->bindParam('dateDebut', $dateDebut);
-                    $query->bindParam('dateFin', $dateFin);
-                    $query->bindParam('dateInsertion', $date);
-                    $query->bindParam('id', $_SESSION['id']);
-                    $query->execute();
-                    //  Mise à jour du filtre
-                    $filtre = "AND C.date_heure_livraison_com >= $dateDebut AND C.date_heure_livraison_com <= $dateFin";
+                    $erreurFiltre = true;
+                    if($dateFin >= $dateDebut)
+                    {
+                        //  Mise à jour du filtre
+                        $query = $co->prepare("UPDATE `historique` SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin, dateInsertion_hist = :dateInsertion, fk_user_id = :id");                
+                        $query->bindParam('dateDebut', $dateDebut);
+                        $query->bindParam('dateFin', $dateFin);
+                        $query->bindParam('dateInsertion', $date);
+                        $query->bindParam('id', $_SESSION['id']);
+                        $query->execute();
+                        $filtre = "AND C.date_heure_livraison_com >= '$dateDebut' AND C.date_heure_livraison_com <= '$dateFin'";
+                    } else {
+                        echo "<p class='invalide'> Veuillez saisir une période cohérente </p>";
+                        $erreurFiltre = false;
+                    }
                 }
             ?>
         </section>
@@ -86,43 +98,95 @@
                     <th class="th textAlign"> Actions </th>                
                 </tr>
                 <?php
-                    // Select nom sandwich 
-                    $reqAfficher = $co->prepare("
-                        SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
-                        FROM commande C, sandwich S, boisson B, dessert D
-                        WHERE C.fk_user_id = 1
-                        AND C.fk_sandwich_id = S.id_sandwich
-                        AND C.fk_boisson_id = B.id_boisson
-                        AND C.fk_dessert_id = D.id_dessert
-                        ORDER BY C.id_com" . $filtre);
-                    $reqAfficher->execute();
-                    $afficher = $reqAfficher->fetchAll();
-
-                    foreach ($afficher as $resultat)
+                    if(!isset($_POST['submit']) or !$erreurFiltre)
                     {
-                        if($resultat['chips_com'] == 1)
-                        {
-                            $chips = "oui";
-                        }else{ $chips = "non";}
+                        // Select nom sandwich 
+                        $reqAfficher = $co->prepare("
+                            SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
+                            FROM commande C, sandwich S, boisson B, dessert D
+                            WHERE C.fk_user_id = 1
+                            AND C.fk_sandwich_id = S.id_sandwich
+                            AND C.fk_boisson_id = B.id_boisson
+                            AND C.fk_dessert_id = D.id_dessert
+                            ". $filtre ."
+                            ORDER BY C.date_heure_livraison_com");
+                        $reqAfficher->execute();
+                        $afficher = $reqAfficher->fetchAll();
 
-                        if($resultat['annule_com'] == 1)
+                        if(sizeof($afficher) == 0)
                         {
-                            $annule = "oui";
-                        }else{ $annule = "non";}
+                            echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
+                        } else {
+                            foreach ($afficher as $resultat)
+                            {
+                                if($resultat['chips_com'] == 1)
+                                {
+                                    $chips = "oui";
+                                }else{ $chips = "non";}
+                                if($resultat['annule_com'] == 1)
+                                {
+                                    $annule = "oui";
+                                }else{ $annule = "non";}
+                                echo "<tr>";
+                                    echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
+                                    echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
+                                    echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
+                                    echo "<td class='tableau'>". $chips ."</td>";
+                                    echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
+                                    echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
+                                    echo "<td class='tableau'>". $annule ."</td>";
+                                    echo "<td class='tableau'>
+                                        <input class='btnForm1 textAlign' value='Modifier' name='modifier' type='submit'>
+                                        <input class='btnForm1 textAlign' value='Annuler' name='annuler' type='submit'>
+                                    </td>";
+                                echo "</tr>";
+                            }
+                        }
+                    }
+                    if(isset($_POST['submit']) and $erreurFiltre)
+                    {
+                        // Select nom sandwich 
+                        $reqAfficher = $co->prepare("
+                            SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
+                            FROM commande C, sandwich S, boisson B, dessert D
+                            WHERE C.fk_user_id = 1
+                            AND C.fk_sandwich_id = S.id_sandwich
+                            AND C.fk_boisson_id = B.id_boisson
+                            AND C.fk_dessert_id = D.id_dessert
+                            ". $filtre ."
+                            ORDER BY C.date_heure_livraison_com");
+                        $reqAfficher->execute();
+                        $afficher = $reqAfficher->fetchAll();
 
-                        echo "<tr>";
-                            echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
-                            echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
-                            echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
-                            echo "<td class='tableau'>". $chips ."</td>";
-                            echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
-                            echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
-                            echo "<td class='tableau'>". $annule ."</td>";
-                            echo "<td class='tableau'>
-                                <input class='btnForm1 textAlign' value='Modifier' name='modifier' type='submit'>
-                                <input class='btnForm1 textAlign' value='Annuler' name='annuler' type='submit'>
-                            </td>";
-                        echo "</tr>";
+                        if(sizeof($afficher) == 0)
+                        {
+                            echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
+                        } else {
+                            foreach ($afficher as $resultat)
+                            {
+                                if($resultat['chips_com'] == 1)
+                                {
+                                    $chips = "oui";
+                                }else{ $chips = "non";}
+                                if($resultat['annule_com'] == 1)
+                                {
+                                    $annule = "oui";
+                                }else{ $annule = "non";}
+                                echo "<tr>";
+                                    echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
+                                    echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
+                                    echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
+                                    echo "<td class='tableau'>". $chips ."</td>";
+                                    echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
+                                    echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
+                                    echo "<td class='tableau'>". $annule ."</td>";
+                                    echo "<td class='tableau'>
+                                        <input class='btnForm1 textAlign' value='Modifier' name='modifier' type='submit'>
+                                        <input class='btnForm1 textAlign' value='Annuler' name='annuler' type='submit'>
+                                    </td>";
+                                echo "</tr>";
+                            }
+                        }
                     }
                 ?>
             </table>
