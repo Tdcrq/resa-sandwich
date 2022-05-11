@@ -50,14 +50,6 @@
                     <label for="dateFin">au </label>
                     <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-01-01" name="dateFin" class="saisieFiltre" value="<?php echo $reqFiltre['dateFin_hist'];?>">
                 </div>
-                <div class="infoOrdre">
-                    <label for="ordre">Ordre : </label>
-                    <select name="ordre" id="ordre" class="">
-                        <option value="-1" selected="selected"></option>
-                        <option value="0"> Croissant </option>
-                        <option value="1"> Décroissant </option>
-                    </select>
-                </div>
                 <input class="btnForm1 textAlign" type="submit" name="submit" value="Appliquer le filtre">
             </form>
             <?php
@@ -87,22 +79,23 @@
 
         <section class="affichage">
             <table>
-                <tr>
-                    <th class="th textAlign"> Sandwich </th>
-                    <th class="th textAlign"> Boisson </th>
-                    <th class="th textAlign"> Dessert </th>
-                    <th class="th textAlign"> Chips </th>
-                    <th class="th textAlign"> Date commande </th>
-                    <th class="th textAlign"> Date livraison </th>
-                    <th class="th textAlign"> Commande annulée </th>   
-                    <th class="th textAlign"> Actions </th>                
-                </tr>
                 <?php
                     if(!isset($_POST['submit']) or !$erreurFiltre)
                     {
+                        echo "
+                            <tr>
+                                <th class='th textAlign'> Sandwich </th>
+                                <th class='th textAlign'> Boisson </th>
+                                <th class='th textAlign'> Dessert </th>
+                                <th class='th textAlign'> Chips </th>
+                                <th class='th textAlign'> Date commande </th>
+                                <th class='th textAlign'> Date livraison </th>
+                                <th class='th textAlign'> Commande annulée </th>   
+                                <th class='th textAlign'> Actions </th>                
+                            </tr>";
                         // Select nom sandwich 
                         $reqAfficher = $co->prepare("
-                            SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
+                            SELECT C.id_com, S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
                             FROM commande C, sandwich S, boisson B, dessert D
                             WHERE C.fk_user_id = 1
                             AND C.fk_sandwich_id = S.id_sandwich
@@ -136,15 +129,16 @@
                                     echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
                                     echo "<td class='tableau'>". $annule ."</td>";
                                     echo "<td class='tableau'>
-                                        <input class='btnForm1 textAlign' value='Modifier' name='modifier' type='submit'>
-                                        <input class='btnForm1 textAlign' value='Annuler' name='annuler' type='submit'>
-                                    </td>";
+                                        <a class='btnForm1' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
+                                        <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>";
+                                    echo "</td>";
                                 echo "</tr>";
                             }
                         }
                     }
                     if(isset($_POST['submit']) and $erreurFiltre)
                     {
+                        
                         // Select nom sandwich 
                         $reqAfficher = $co->prepare("
                             SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
@@ -162,6 +156,17 @@
                         {
                             echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
                         } else {
+                            echo "
+                            <tr>
+                                <th class='th textAlign'> Sandwich </th>
+                                <th class='th textAlign'> Boisson </th>
+                                <th class='th textAlign'> Dessert </th>
+                                <th class='th textAlign'> Chips </th>
+                                <th class='th textAlign'> Date commande </th>
+                                <th class='th textAlign'> Date livraison </th>
+                                <th class='th textAlign'> Commande annulée </th>   
+                                <th class='th textAlign'> Actions </th>                
+                            </tr>";
                             foreach ($afficher as $resultat)
                             {
                                 if($resultat['chips_com'] == 1)
@@ -181,9 +186,9 @@
                                     echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
                                     echo "<td class='tableau'>". $annule ."</td>";
                                     echo "<td class='tableau'>
-                                        <input class='btnForm1 textAlign' value='Modifier' name='modifier' type='submit'>
-                                        <input class='btnForm1 textAlign' value='Annuler' name='annuler' type='submit'>
-                                    </td>";
+                                        <a class='btnForm1' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
+                                        <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>";
+                                    echo "</td>";
                                 echo "</tr>";
                             }
                         }
