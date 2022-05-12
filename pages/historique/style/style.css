@@ -117,3 +117,14 @@
     }
 }
 
+.affichage {
+    padding-top: 5vh;
+    margin-left: 10vw;
+}
+
+.sectionFormulaireModifier {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 31px;
+}
