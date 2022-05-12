@@ -76,7 +76,7 @@
                         </div>
                         <select class ="selectStyle" name = "boisson" id="">
                             <?php
-                                foreach($commande as $row2)
+                                foreach($commande as $row)
                                 {
                                     echo "<option value='".$row['id_boisson']."'>".$row['nom_boisson']."</option>";                                
                                 } 
@@ -160,22 +160,23 @@
                         </div>
                     </div>
                     <div class = "heureCon">
+                        <?php
+                        foreach($commande as $row)
+                        {
+                            $date_livraison = $row['date_heure_livraison_com'];
+                            $date_livraison = explode(' ', $date_livraison);
+                        }
+                        ?>
                         <h3>Date et heure de livraison :</h3>
-                        <input type="date" value="<?php echo($dto->format('Y-m-d'));?>" min="<?php echo($dto->format('Y-m-d'));?>" name = "date">
-                        <input type="time" min="12:30" max="14:30" value ="12:30" name = "heure">
+                        <input type="date" value="<?php echo $date_livraison[0]; ?>" min="<?php echo($dto->format('Y-m-d'));?>" name = "date">
+                        <input type="time" min="12:30" max="14:30" value ="<?php echo $date_livraison[1]; ?>" name = "heure">
                         <p class ="comments"><?php echo $timeErreur; ?></p>
-                        <input type="submit" name = "submit" id = "blue" class = "selectStyle" value = "Commander">
+                        <input type="submit" name = "submit" id = "blue" class = "selectStyle" value = "Modifier">
                         <p class = "comments"><?php echo($statutCommande);?></p>
                     </div>
                 </div>
             </form>
         </div>
-
-
-        <!-- Footer -->
-        <?php 
-            // require "../../../require/footer.php"; 
-        ?>
     </body>
 </html>
 
