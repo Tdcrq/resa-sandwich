@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Modifier date de livraison</title>
+        <title>Annuler la commande</title>
         <link rel="stylesheet" href="../style/style.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -16,7 +16,7 @@
         <!-- Header -->
         <?php require "../../../require/header.php" ?>
 
-        <section name='affichage'>
+        <section class="affichage">
             <table>
                 <tr>
                     <th class='th textAlign'> Sandwich </th>
@@ -67,9 +67,9 @@
                 ?>
             </table>
         </section>
-        <section name='sectionFormulaireModifier'>
+        <section class='sectionFormulaireModifier'>
             <form method="post">
-                <label for="reponse"> Voulez-vous annuler la commande ?</label>
+                <label for="reponse"> <h3> Voulez-vous annuler la commande ? </h3></label>
                 <input type="submit" class="btnForm1" value="Oui" name="reponse">
                 <input type="submit" class="btnForm1" value="Non" name="reponse">
             </form>
