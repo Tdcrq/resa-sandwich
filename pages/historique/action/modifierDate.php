@@ -3,7 +3,14 @@
     $co = connexionBdd();
 
     // récupérer la commande
-    $id_com = $_GET['id'];
+    if(isset($_GET['id']))
+    {
+        $id_com = $_GET['id'];
+    }
+    if(!isset($_GET['id']))
+    {
+        $id_com = '3';
+    }
     $reqCommande = $co->prepare('SELECT *
     FROM commande C, sandwich S, boisson B, dessert D
     WHERE C.id_com = :id
@@ -17,8 +24,8 @@
     // Déclaration des variables
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
     $sandwichErreur = $dessertErreur = $boissonErreur = $timeErreur = " ";
-    $valid = false;
-    $heureLimite =  date("H:i",mktime(9, 30, 0, 0, 0, 0));
+    $valid = true;
+    $heureLimite =  date("H:i",mktime(20, 30, 0, 0, 0, 0));
     $dto = new datetime();
     $timezone = new DateTimeZone('Europe/Paris');
     $dto->setTimezone($timezone);
@@ -177,8 +184,58 @@
                 </div>
             </form>
         </div>
+        <?php
+            if (isset($_POST['submit']))
+            {
+                //vérification que les variables ne sont pas vide et affichage des messages erreur
+                if (empty($_POST["date"]) || empty($_POST["heure"]))
+                {
+                    $valid = false;
+                    $timeErreur = "N'oubliez pas de renseigner la date de livraison";
+                }
+                //vérification que l'Utilisateur ne commande pas après 9h30.
+                if ($dto->format('H:i') > $heureLimite){
+                    $valid = false;
+                    $statutCommande = "Heure limite pour commander : 9h30";
+                }
+                if (empty($_POST["date"]) || empty($_POST["heure"]) || empty($_POST["sandwich"]) || empty($_POST["dessert"]) || empty($_POST["boisson"])){
+                    $statutCommande = 'Veillez à bien selectionner tout les champs';
+                }
+                $time = $_POST["heure"];
+                $date = $_POST["date"];
+                $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
+                $heureLimiteL2 =  date("H:i",mktime(14, 30, 0, 0, 0, 0));
+                //vérification que le jour de livraison ne soit pas passé.
+                if ($date < $dto->format('Y-m-d'))
+                {
+                    $valid = false;
+                    $statutCommande = 'Vous ne pouvez pas commander pour un jour anterieure';
+                }
+                //vérification que l'heure de livraison est comprise entre 12h30 et 14h30.
+                if ($time < $heureLimiteL || $time > $heureLimiteL2){
+                    $valid = false;
+                    $statutCommande = 'Vous pouvez pas vous faire livrer qu\'entre 12h30 et 14H30 ';
+                }
+                if($valid == true)
+                {
+                    //récupération saisie Utilisateur
+                    $heure = ($_POST["heure"]); 
+                    $timestampJour = strtotime($date);
+                    $jourDeLivrasion = date("w", $timestampJour);
+                    //vérification que le jour de livraison ne soit pas samedi ou dimanche.
+                    if ($jourDeLivrasion == 6 || $jourDeLivrasion == 0){
+                        $statutCommande = "vous ne pouvez pas reserver pour le samedi et dimanche.";
+                    } else if ($jourDeLivrasion != 6 || $jourDeLivrasion != 0){
+                        //insertion de la commande en bdd
+                        $date_time = $date ." ". $time;
+                        $req_date = $co->prepare("UPDATE commande SET date_heure_livraison_com = :dateLivraison WHERE id_com = :id");
+                        $req_date->bindParam('dateLivraison', $date_time);
+                        $req_date->bindParam('id', $id_com);
+                        $exe_date = $req_date->execute();
+                    }
+                }
+                // echo "<script> location.replace('../index.php'); </script>";
+            }
+        ?>
     </body>
 </html>
-
-<?php
-?>
