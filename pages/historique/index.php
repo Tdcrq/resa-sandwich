@@ -4,6 +4,7 @@
 
     session_start();
     $_SESSION['id'] = 1;
+    $id = $_SESSION['id'];
 
     $annee = date("Y");
     if(date('m')){
@@ -27,7 +28,18 @@
         <!-- HEADER -->
         <?php require "../../require/header.php" ?>
         <section class="accueil textAlign">
-            <h1 class="titre"> Vos commandes </h1>
+            <?php
+                $reqInfo = $co->prepare("SELECT * FROM utilisateur WHERE id_user = :id");
+                $reqInfo->bindParam('id', $id);
+                $reqInfo->execute();
+                $info = $reqInfo->fetchAll();
+                foreach($info as $info_user)
+                {
+                    $nom_user = $info_user['nom_user'];
+                    $prenom_user = $info_user['prenom_user'];
+                }
+            ?>
+            <h1 class="titre"> Les commandes de <?php echo $nom_user ." ". $prenom_user; ?> </h1>
             <p class="description">
                 Toutes vos comandes qui sont invalidées par la cuisine seront <span class="invalide">rouge et en gras.</span>
             </p>
@@ -77,7 +89,7 @@
             ?>
         </section>
 
-        <section class="affichage">
+        <section class="affichageIndex">
             <table>
                 <?php
                     if(!isset($_POST['submit']) or !$erreurFiltre)
