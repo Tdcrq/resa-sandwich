@@ -14,7 +14,7 @@
 
     <body>
         <?php 
-            require('../projetFA/require/navbar.php');
+            require('./require/header.php');
         ?>
         <section class="body">
             <div class="PAtitre">
