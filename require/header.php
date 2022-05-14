@@ -8,11 +8,13 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="#">Accueil</a>
-                </li>                          
-                <li class="nav-item2">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./pages/historique"> Historique</a>
+                </li>             
+                <li class="nav-item">
                     <a class="nav-link" href="#"> <i class="fa-solid fa-right-to-bracket"></i> Se connecter</a>
                 </li>
-                </div>
             </ul>
         </div>
     </div>
