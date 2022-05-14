@@ -1,12 +1,15 @@
 <?php
     //connection bdd
-    require('../db/connexion.php');
+    require('../../db/connexion.php');
     $co = connexionBdd();
     session_start();// recup des var de session
-    if(!isset($_SESSION['user']))//verification que l'utilisateur est bien connecté
+    if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
-        header('Location: connect.php');
+        header('Location: http://localhost/resa-sandwich-accueil/forms/form_conn.php');
         exit();
+    }else{
+        $nameUser = $_SESSION['name_user'];//recuperation du nameUser
+        $idUser = $_SESSION['id_user'];//recuperation de l'idUser
     }
     //déclaration des variables
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
@@ -21,7 +24,7 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
         
-        //vérification que les variables ne sont pas vide et affichage des messages erreur
+        //vérification que les variables ne sont pas vide et affichage des messages d'erreurs
         $valid = true;
         if (empty($_POST["sandwich"])){
             $valid = false;
@@ -40,6 +43,7 @@
             $valid = false;
             $timeErreur = "N'oubliez pas de renseigner la date de livraison";
         }
+
         //vérification que l'Utilisateur ne commande pas après 9h30.
         if ($dto->format('H:i') > $heureLimite){
             $valid = false;
@@ -48,6 +52,19 @@
         if (empty($_POST["date"]) || empty($_POST["heure"]) || empty($_POST["sandwich"]) || empty($_POST["dessert"]) || empty($_POST["boisson"])){
             $statutCommande = 'Veillez à bien selectionner tout les champs';
         }
+          //fonction qui limite l'injection sql dans la value des selects
+        function verifyInput($var)
+        {
+            $var = trim($var);
+            $var = stripslashes($var);
+            $var = htmlspecialchars($var);
+            if ($var >= 1 && $var <=6){
+                return $var;
+            }else{
+                return false;
+            }
+        }
+
         $time = $_POST["heure"];
         $date = $_POST["date"];
         $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
@@ -67,20 +84,37 @@
     if($valid == true)
     {
         //récupération saisie Utilisateur
+        $userC = $_SESSION['id_user'];
         $sandwich = ($_POST["sandwich"]);
         $dessert = ($_POST["dessert"]);
         $boisson = ($_POST["boisson"]);
         $chips = ($_POST["chipsR"]);
         $heure = ($_POST["heure"]); 
+        $annuleCom = 0;
         $timestampJour = strtotime($date);
         $jourDeLivrasion = date("w", $timestampJour);
+        $dateR = "$date $heure";
+        $validF = true;
+        if (verifyInput($boisson) == false || verifyInput($chips) == false || verifyInput($sandwich) == false || verifyInput($dessert) == false){
+            $validF = false;
+            $statutCommande = "Erreur";
+        }
         //vérification que le jour de livraison ne soit pas samedi ou dimanche.
         if ($jourDeLivrasion == 6 || $jourDeLivrasion == 0){
             $statutCommande = "vous ne pouvez pas reserver pour le samedi et dimanche.";
-        } else if ($jourDeLivrasion != 6 || $jourDeLivrasion != 0){
+            // si le jour de livraison est bon et que la fonction verify input return true 
+        } else if (($jourDeLivrasion != 6 || $jourDeLivrasion != 0) && $validF == true){
             //insertion de la commande en bdd
-            $co->query("INSERT into commande(fk_user_id,fk_sandwich_id,fk_boisson_id,fk_dessert_id,chips_com,date_heure_livraison_com,annule_com) VALUES ('1','$sandwich', '$boisson' , '$dessert', '$chips','$date $time','0')");
-            $statutCommande = 'Commande validée';
+            $query = $co->prepare("INSERT INTO commande(fk_user_id,fk_sandwich_id,fk_boisson_id,fk_dessert_id,chips_com,date_heure_livraison_com,annule_com) VALUES (:userC, :sandwich ,:boisson ,:dessert ,:chips ,:dateC, :annule)");
+            $query->bindParam('userC', $userC);
+            $query->bindParam('sandwich', $sandwich);
+            $query->bindParam('boisson', $boisson);
+            $query->bindParam('dessert', $dessert);
+            $query->bindParam('chips', $chips);
+            $query->bindParam('dateC', $dateR);
+            $query->bindParam('annule', $annuleCom);
+            $query->execute();
+
             header('Location: confirm.php');
             $_SESSION["sandwich"] = $sandwich;
             $_SESSION["boisson"] = $boisson;
@@ -109,9 +143,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php require('../require/navbar.php')?>
+    <?php require('require/navbar.php')?>
     <section class = "formSec">
-        <H2 id = "phraseCommande"><span id = "blueN"><?php $name = 'loris' ; echo "$name</span>, Voulez-vous passer une commande aujourd'hui ?</H2>";?>
+        <H2 id = "phraseCommande"><span id = "blueN"><?php $name = $nameUser ; echo " $name</span>, Voulez-vous passer une commande aujourd'hui ?</H2>";?>
         <div class = "formCon">
             <form method="post" id="sandForm" role=form action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <div class = "sbcCon" id="test">
@@ -221,8 +255,7 @@
                         </div>
                         <div class = "chipsSelectCon">
                             <div>
-                                <input type="radio" value = "1" name ="chipsR" id="chipsO"
-                                checked>
+                                <input type="radio" value = "1" name ="chipsR" id="chipsO"checked>
                                 <label for="chipsO">Oui ?</label>
                             </div>
                             <div>
@@ -243,6 +276,5 @@
             </form>
         </div>
     </section>
-    <?php require('../require/footer.php')?>
 </body>
 </html>
