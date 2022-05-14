@@ -14,7 +14,7 @@
 
 <body>
     <?php 
-        require('../projetFA/require/navbar.php');
+        require('./projetFA/require/navbar.php');
     ?>
     <section class="body">
         <div class="PAtitre">
@@ -47,7 +47,7 @@
         </div>    
         </section>
     <?php 
-        require('require/footer.php');
+        require('./require/footer.php');
     ?>
 </body>
 </html>
