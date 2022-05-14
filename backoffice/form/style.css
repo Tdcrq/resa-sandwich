@@ -1,0 +1,175 @@
+#tab{
+    margin-top: 3em;
+    margin-left: 1em;
+    width: 68vw;
+    height: 95vh;
+}
+
+input{
+    border: 3px solid #191970;
+    text-align: center;
+}
+
+th{
+    text-align: center;
+    border-bottom: 3px solid #191970;
+}
+
+td{
+    text-align: center;
+    border-bottom: 3px solid #191970;
+}
+
+#filtre{
+    background-color: rgba(249, 210, 82, 0.48);
+    padding: 5em 0em 0em 7em;
+    height: 102vh;
+}
+
+#formFiltre input{
+    border-radius: 8px;
+    margin-bottom: 1vh;
+}
+
+#send{
+    margin-left: 4vw;
+}
+
+button{
+    background-color: #F9D252;
+    color: #fff;
+    border-radius: 8px;
+    border-color: #F9D252;
+}
+.mt-5{
+    margin: 0;
+}
+
+#flex{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+    min-height: auto;
+}
+
+#flexG{
+    width: 75vw;
+}
+
+#flexD{
+    width: 25vw;
+}
+
+.modif_a{
+    background-color: #F9D252;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 5px;
+    margin-right: 1vw;
+}
+
+#sup{
+    margin: 10vh 0vw 10vh 0vw;
+    height: 27.3vh;
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#tab_desa{
+    margin: 10vh 0vw 10vh 0vw;
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#tab_desa h5{
+    margin-bottom: 5vh;
+}
+
+#tab_desa table{
+    width: 60vw;
+    height: 20vh;
+    margin-bottom: 5vh;
+}
+
+#form_desa{
+    display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#form_desa button{
+    margin: 5px;
+}
+
+#text_modif{
+    height: 27.3vh;
+    display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	align-content: stretch;
+    margin: 10vh 0vw 10vh 0vw;
+    padding: 18px;
+}
+
+#text_modif h5{
+    margin-bottom: 5vh;
+}
+
+#text_modif input{
+    width: 15vw;
+    margin-bottom: 1vh;
+}
+
+#text_modif #update{
+    margin-left: 2.5vw;
+}
+
+/* NAVBAR */
+.navbar-brand img
+{
+    width: 55%;
+}
+.navbar
+{
+    background-color: #191970;
+}
+
+.navbar-light .navbar-nav .nav-link
+{
+    color: white;
+}
+/* FOOTER */
+.footer
+{
+    background-color: #191970;
+    margin-top: 0px;
+}
+
+.footer h6
+{
+    color: darkgoldenrod;
+}
+
+.bod
+{
+    padding-top: 5%;
+}
+
+.footer p
+{
+    color: white;
+}
+
+.copyright
+{
+    color: white;
+}
