@@ -59,7 +59,7 @@ if (isset($_POST['connexion'])){
 </head>
     <body class="bgform">
     <?php 
-        require('../require/navbarconn.php');
+        require('../require/navbar_conn.php');
     ?>
         <section class="formconnbody">
             <div class="contact">
@@ -81,7 +81,7 @@ if (isset($_POST['connexion'])){
             </div>
         </section>
         <?php 
-        require('../require/footerconn.php');
+        require('../require/footer_conn.php');
         ?>
     </body>
 </html>
