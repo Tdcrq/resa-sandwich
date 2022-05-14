@@ -1,6 +1,6 @@
 <?php
 // Permet d'appeler la fonction de connexion à la BD
-require('../DB/connexion.php');
+require('../db/connexion.php');
 
 // Démarrage d'une session
 session_start();
@@ -30,11 +30,27 @@ if (isset($_POST['connexion'])){
     $stmt->execute(array($email));
     // on va chercher récuperer les resultats
     $user = $stmt->fetch(); 
+
     if(password_verify($password, $user['password_user'])){ 
-        // on démarre une session avec email_user
+         // on recupere l'id de lutilisateur connecté
+        $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
+        $query->bindParam('email', $email);
+        $query->execute();
+        $idUser = $query->fetch();
+        $idUser = $idUser[0];
+
+        $query = $co->prepare("SELECT `nom_user` FROM `utilisateur` WHERE `email_user` = :email");
+        $query->bindParam('email', $email);
+        $query->execute();
+        $nameUser = $query->fetch();
+        $nameUser = $nameUser[0];
+        // on démarre une session avec email_user , idUser ,nameUser
         $_SESSION['email_user'] = $email;
+        $_SESSION['id_user'] = $idUser;
+        $_SESSION['name_user'] = $nameUser;
+        
         // on redirige l'utilisateur
-        header("Location:?");
+        header("Location: http://localhost/finpro/");
     }else{
         // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
         // affiche un message d'erreur
@@ -58,9 +74,7 @@ if (isset($_POST['connexion'])){
     <link rel="stylesheet" href="./cssform/connn.css" />
 </head>
     <body class="bgform">
-    <?php 
-        require('../require/navbar_conn.php');
-    ?>
+        
         <section class="formconnbody">
             <div class="contact">
                 <h1>Connectez vous</h1>
@@ -80,8 +94,5 @@ if (isset($_POST['connexion'])){
                 <p>connectez-vous en tant qu'<a href=form_admin.php>administrateur </a></p>
             </div>
         </section>
-        <?php 
-        require('../require/footer_conn.php');
-        ?>
     </body>
 </html>
