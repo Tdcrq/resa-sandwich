@@ -1,6 +1,6 @@
 <?php
     //connection bdd
-    require('db/connexion.php');
+    require('../db/connexion.php');
     $co = connexionBdd();
     //déclaration des variables
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
@@ -103,7 +103,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php require('require/navbar.php')?>
+    <?php require('../require/navbar.php')?>
     <section class = "formSec">
         <H2 id = "phraseCommande"><span id = "blueN"><?php $name = 'loris' ; echo "$name</span>, Voulez-vous passer une commande aujourd'hui ?</H2>";?>
         <div class = "formCon">
@@ -237,5 +237,6 @@
             </form>
         </div>
     </section>
+    <?php require('../require/footer.php')?>
 </body>
 </html>
