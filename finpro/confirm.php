@@ -1,14 +1,14 @@
 <?php 
-//récupération des variables
-session_start();
-require('../db/connexion.php');
-$co = connexionBdd();
-$sandwich = $_SESSION["sandwich"];
-$boisson= $_SESSION["boisson"] ;
-$dessert = $_SESSION["dessert"];
-$chips = $_SESSION["chips"] ;
-$heure = $_SESSION["heure"];
-$date = $_SESSION["jdl"];
+    //récupération des variables
+    session_start();
+    require('../db/connexion.php');
+    $co = connexionBdd();
+    $sandwich = $_SESSION["sandwich"];
+    $boisson= $_SESSION["boisson"] ;
+    $dessert = $_SESSION["dessert"];
+    $chips = $_SESSION["chips"] ;
+    $heure = $_SESSION["heure"];
+    $date = $_SESSION["jdl"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
