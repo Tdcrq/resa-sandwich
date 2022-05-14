@@ -2,6 +2,12 @@
     //connection bdd
     require('../db/connexion.php');
     $co = connexionBdd();
+    session_start();// recup des var de session
+    if(!isset($_SESSION['user']))//verification que l'utilisateur est bien connecté
+    {
+        header('Location: connect.php');
+        exit();
+    }
     //déclaration des variables
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
     $sandwichErreur = $dessertErreur = $boissonErreur = $timeErreur = " ";
