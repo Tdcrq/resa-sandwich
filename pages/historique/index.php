@@ -11,6 +11,21 @@
         $annee += 1;
     }
 
+    $dto = new datetime();
+    $timezone = new DateTimeZone('Europe/Paris');
+    $dto->setTimezone($timezone);
+
+    $reqHistorique = $co->prepare("SELECT * FROM historique WHERE fk_user_id = :id");
+    $reqHistorique->bindParam('id', $id);
+    $reqHistorique->execute();
+    $historique = $reqHistorique->fetchAll();
+    foreach($historique as $filtre)
+    {
+        $date_livraison = $filtre['dateDebut_hist'];
+        $date_time_filtre_min = explode(' ', $date_livraison);
+        $date_livraison = $filtre['dateFin_hist'];
+        $date_time_filtre_max = explode(' ', $date_livraison);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -107,17 +122,18 @@
                             </tr>";
                         // Select nom sandwich 
                         $reqAfficher = $co->prepare("
-                            SELECT C.id_com, S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
+                            SELECT *
                             FROM commande C, sandwich S, boisson B, dessert D
                             WHERE C.fk_user_id = 1
                             AND C.fk_sandwich_id = S.id_sandwich
                             AND C.fk_boisson_id = B.id_boisson
                             AND C.fk_dessert_id = D.id_dessert
-                            ". $filtre ."
+                            AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
                             ORDER BY C.date_heure_livraison_com");
+                        $reqAfficher->bindParam('debutFiltre', $date_time_filtre_min[0]);
+                        $reqAfficher->bindParam('finFiltre'  , $date_time_filtre_max[0]);
                         $reqAfficher->execute();
                         $afficher = $reqAfficher->fetchAll();
-
                         if(sizeof($afficher) == 0)
                         {
                             echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
@@ -140,8 +156,15 @@
                                     echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
                                     echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
                                     echo "<td class='tableau'>". $annule ."</td>";
+                                    $passe = "";
+                                    $date_livraison = $resultat['date_heure_livraison_com'];
+                                    $date_livraison = explode(' ', $date_livraison);
+                                    if($date_livraison[0] < $dto->format('Y-m-d'))
+                                    {
+                                        $passe = 'disabled';
+                                    }
                                     echo "<td class='tableau'>
-                                        <a class='btnForm1' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
+                                        <a class='btnForm1 $passe' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
                                         <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>";
                                     echo "</td>";
                                 echo "</tr>";
@@ -153,14 +176,16 @@
                         
                         // Select nom sandwich 
                         $reqAfficher = $co->prepare("
-                            SELECT S.nom_sandwich, B.nom_boisson, D.nom_dessert, C.chips_com, C.date_heure_com, C.date_heure_livraison_com, C.annule_com
+                            SELECT *
                             FROM commande C, sandwich S, boisson B, dessert D
                             WHERE C.fk_user_id = 1
                             AND C.fk_sandwich_id = S.id_sandwich
                             AND C.fk_boisson_id = B.id_boisson
                             AND C.fk_dessert_id = D.id_dessert
-                            ". $filtre ."
+                            AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
                             ORDER BY C.date_heure_livraison_com");
+                        $reqAfficher->bindParam('debutFiltre', $date_time_filtre_min[0]);
+                        $reqAfficher->bindParam('finFiltre'  , $date_time_filtre_max[0]);
                         $reqAfficher->execute();
                         $afficher = $reqAfficher->fetchAll();
 
@@ -199,8 +224,8 @@
                                     echo "<td class='tableau'>". $annule ."</td>";
                                     echo "<td class='tableau'>
                                         <a class='btnForm1' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
-                                        <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>";
-                                    echo "</td>";
+                                        <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>
+                                    </td>";
                                 echo "</tr>";
                             }
                         }
