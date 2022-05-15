@@ -38,26 +38,28 @@ if (isset($_POST['inscription'])){
         if (preg_match("#[0-9]+#", $_POST['mdp'])){
             /// Exécution de la requête 
             $query->execute(); 
+            // recup id pour le $_SESSION
+            $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
+            $query->bindParam('email', $email);
+            $query->execute();
+            $idUser = $query->fetch();
+            $_SESSION['id_user'] = $idUser[0];
+            $id = $_SESSION['id_user'];
+
             if ($query) {
                 echo "<div class='sucess'>
                     <h3>Vous êtes inscrit avec succès.</h3>
                     <p>Cliquez ici pour vous <a href='form_conn.php'>connecter</a></p>
                     </div>";
-                $reqId_user = $co->prepare('SELECT MAX(id_user) FROM utilisateur');
-                $reqId_user->execute();
-                $reqId_user = $reqId_user->fetchAll();
-                foreach($reqId_user as $id)
-                {
-                    $id_user = $id['id_user'];
-                }
+                
                 // Ajout d'un filtre par défaut
                 $annee = date("Y");
                 if(date('m') >= '09')
                 {
                     $annee += 1;
                 }else{ $annee -= 1;}
-                $dateMin = $annee-2 .'-09-01';
-                $dateMax = $annee .'-07-15';
+                $dateMin = $annee .'-09-01';
+                $dateMax = $annee+1 .'-07-15';
 
                 $dto = new datetime();
                 $timezone = new DateTimeZone('Europe/Paris');
@@ -68,9 +70,8 @@ if (isset($_POST['inscription'])){
                 $reqfiltre->bindParam('dateDebut', $dateMin);
                 $reqfiltre->bindParam('dateFin', $dateMax);
                 $reqfiltre->bindParam('dto', $aujourdhui);
-                $reqfiltre->bindParam('id_user', $id_user);
+                $reqfiltre->bindParam('id_user', $id);
                 $reqfiltre->execute();
-                var_dump($aujourdhui);
 
             }else {
                 echo ' le mot de passe doit contenir au moins 8 caractères, au moins 1 chiffre et au moins 1 caractère spécial ';
