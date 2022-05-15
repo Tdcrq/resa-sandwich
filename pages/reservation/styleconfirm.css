@@ -1,0 +1,58 @@
+/*style récapitulatif de commande*/
+@import url(//db.onlinewebfonts.com/c/827d075b1538829cc0db75696e4d5fa2?family=Speedee);
+@font-face {
+    font-family: "Speedee";
+    src: url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.eot");
+    src: url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.eot?#iefix") format("embedded-opentype"), 
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.woff2") format("woff2"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.woff") format("woff"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.ttf") format("truetype"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.svg#Speedee") format("svg");
+}
+/*style body*/
+body{
+    font-family: "Speedee";
+    height: 100vh;
+    display: flex;
+}
+
+.con {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    height: fit-content;
+    width: fit-content;
+    border : 4px solid #F9D252;
+    border-radius: 6px;
+}
+
+.headercon{
+    background-color: #191970;
+    color:#fff;
+    border-radius: 1px;
+    padding: 10px 20px;
+}
+
+.bodycon{
+    padding: 30px 0;
+}
+
+.btnStyle{
+    text-align: center;
+    margin: 8px 0 8px 0;
+    height: 45px;
+    width: fit-content;
+    background-color:#F9D252;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+/*Resposive*/
+@media (max-width: 450px) { 
+    .headercon{
+        font-size: 0.9rem;
+    }
+}
