@@ -1,12 +1,12 @@
 <?php
     require("../../db/connexion.php");
 
-    $conn = connexionBD();
+    $conn = connexionBdd();
 
     session_start();// recup des var de session
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
-        header("Location: google.com");
+        header("Location: ../../forms/form_conn.php");
         exit();
     }else{
         $nameUser = $_SESSION['name_user'];//recuperation du nameUser
@@ -50,9 +50,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="test.js"></script>
+    <script src="activer.js"></script>
     <link rel="stylesheet" href="style/style.css">
-    <title>documztn</title>
+    <title>Gestion utilisateur</title>
 </head>
 <body>
     <?php
@@ -98,8 +98,8 @@
                             echo "<td><form method='get' name='formulaire_delete/update'>
                                         <a class='modif_a' name='delete' href='sup.php?id=".$row['id_user']. "' >suprimer </a> 
                                         <a class='modif_a' name='update' href='modif.php?id=".$row['id_user']. "' >modifier </a>
-                                       </form>
-                                  </td>";
+                                        </form>
+                                </td>";
                             echo"</tr>";
                         }
                     ?>
@@ -141,7 +141,7 @@
         </div>
     </div>
     <?php
-        require "../..require/footer.php";
+        require "../../require/footer.php";
     ?>
 </body>
 </html>
