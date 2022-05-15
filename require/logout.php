@@ -6,5 +6,5 @@
     $_SESSION = array();
 	
     // Redirige vers la page de connexion
-    header("Location: http://localhost/git/resa-sandwich/");
+    header("Location: http://localhost/resa-sandwich/");
 ?>

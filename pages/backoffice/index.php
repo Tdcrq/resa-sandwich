@@ -4,6 +4,7 @@
     $conn = connexionBdd();
 
     session_start();// recup des var de session
+    $_SESSION['bo'] = true;
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
         header("Location: ../../forms/form_conn.php");
@@ -49,6 +50,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Lien Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -57,14 +59,18 @@
     <!-- Lien CSS -->
     <link rel="stylesheet" href="../../css/style_navbar_footer.css">
     <link rel="stylesheet" href="style/style.css">
+    <!-- font -->
+    <link rel="stylesheet" href="../../css/style_font.css">
     <!-- Lien JS activer l'ajout d'utilisateurs -->
     <script src="activer.js"></script>
     <title>Gestion utilisateur</title>
 </head>
 <body>
-    <?php
-        require "../../require/navbar.php";
-    ?>
+    <header>
+        <?php 
+            require('../../require/navbar.php');
+        ?>
+    </header>
     <div id="flex">
         <div id="flexG">
             <!--affichage de tout les utilisateur pour modif supresion -->
@@ -103,7 +109,7 @@
                             echo"<td>".$row['prenom_user']."</td>";
                             echo"<td>".$row['active_user']."</td>";
                             echo "<td><form method='get' name='formulaire_delete/update'>
-                                        <a class='modif_a' name='delete' href='http://localhost/git/resa-sandwich/pages/backoffice/sup.php?id=".$row['id_user']. "' >suprimer </a> 
+                                        <a class='modif_a' name='delete' href='http://localhost/resa-sandwich/pages/backoffice/sup.php?id=".$row['id_user']. "' >suprimer </a> 
                                         <a class='modif_a' name='update' href='modif.php?id=".$row['id_user']. "' >modifier </a>
                                         </form>
                                 </td>";

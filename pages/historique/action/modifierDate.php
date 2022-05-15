@@ -7,7 +7,7 @@
     {
         $id_com = $_GET['id'];
     }else{
-        header('Location: http://localhost/git/resa-sandwich/pages/historique');
+        header('Location: http://localhost/resa-sandwich/pages/historique');
         exit();
     }
     $reqCommande = $co->prepare("SELECT * FROM commande C, sandwich S, boisson B, dessert D WHERE C.id_com = :id AND C.fk_sandwich_id = S.id_sandwich AND C.fk_boisson_id = B.id_boisson AND C.fk_dessert_id = D.id_dessert");
@@ -31,6 +31,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Modifier date de livraison</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Lien Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -39,10 +40,16 @@
         <!-- Lien CSS -->
         <link rel="stylesheet" href="./style/style.css">
         <link rel="stylesheet" href="../../../css/style_navbar_footer.css">
+        <!-- font -->
+        <link rel="stylesheet" href="../../../css/style_font.css">
     </head>
     <body>
         <!-- Header -->
-        <?php require "../../../require/navbar.php"; ?>
+        <header>
+            <?php 
+                require('../../../require/navbar.php');
+            ?>
+        </header>
 
         <div class = "formCon">
             <form method="post" id="sandForm">

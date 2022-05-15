@@ -1,0 +1,15 @@
+/*font*/
+@import url(//db.onlinewebfonts.com/c/827d075b1538829cc0db75696e4d5fa2?family=Speedee);
+@font-face {
+    font-family: "Speedee";
+    src: url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.eot");
+    src: url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.eot?#iefix") format("embedded-opentype"), 
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.woff2") format("woff2"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.woff") format("woff"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.ttf") format("truetype"),
+        url("//db.onlinewebfonts.com/t/827d075b1538829cc0db75696e4d5fa2.svg#Speedee") format("svg");
+}
+
+body {
+    font-family: 'Speedee';
+}

@@ -5,8 +5,8 @@ require('../db/connexion.php');
 
 // Démarrage d'une session
 session_start();
-$_SESSION['form_inscription'] = false;
-$_SESSION['form_connexion'] = false;
+$_SESSION['form_inscription'] = true;
+$_SESSION['form_connexion'] = true;
 
 // Connexion à la BD
 $co = connexionBdd();
@@ -42,7 +42,7 @@ if (isset($_POST['connexion'])){
 
         
         // on redirige l'utilisateur
-        header("Location: http://localhost/git/resa-sandwich/pages/reservation");
+        header("Location: http://localhost/resa-sandwich/pages/reservation");
     }else{
         // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
         // affiche un message d'erreur
@@ -86,6 +86,7 @@ if (isset($_POST['connexion'])){
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1." />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -93,11 +94,15 @@ if (isset($_POST['connexion'])){
     <title>Connectez-vous</title>
     <link rel="stylesheet" href="./cssforms/conn.css" />
     <link rel="stylesheet" href="../css/style_navbar_footer.css">
+    <!-- font -->
+    <link rel="stylesheet" href="../css/style_font.css">
 </head>
     <body class="bgformadmin">
-    <?php 
-        require('../require/navbar.php');
-    ?>
+        <header>
+            <?php 
+                require('../require/navbar.php');
+            ?>
+        </header>
         <section class="formconnbody">
             <div class="contact">
                 <h1>Connectez vous en tant qu'admin </h1>
@@ -116,8 +121,5 @@ if (isset($_POST['connexion'])){
                 </form>
             </div>
         </section>
-        <?php 
-        require('../require/footer.php');
-        ?>
     </body>
 </html>
