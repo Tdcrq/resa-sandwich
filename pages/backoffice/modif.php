@@ -1,7 +1,7 @@
 <?php
-    require("connexion.php");
+    require("../../db/connexion.php");
 
-    $conn = connexionBD();
+    $conn = connexionBdd();
 
     session_start();// recup des var de session
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
@@ -48,7 +48,7 @@
 </head>
 <body>
     <?php
-        require "form/navbar.php";
+        require "../../require/navbar.php";
     ?>
 
     <div id="text_modif">
@@ -81,8 +81,8 @@
         </form>
     </div>
 
-     <?php
-        require "form/footer.php";
+    <?php
+        require "../../require/footer.php";
     ?>
 </body>
 </html>

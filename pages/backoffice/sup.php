@@ -1,7 +1,7 @@
 <?php
-    require("connexion.php");
+    require "../../db/connexion.php";
 
-    $conn = connexionBD();
+    $conn = connexionBdd();
 
     session_start();// recup des var de session
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
@@ -15,7 +15,7 @@
 
     if(isset($_POST["non_sup"]))
     {
-        header('Location: index.php');
+        header('Location: ./index.php');
     }
 
     if(isset($_POST["oui_sup"]))
@@ -38,7 +38,6 @@
             $query->bindParam(':id' , $id);
             $query->execute();
             header('Location: index.php');
-
         }
     }
 ?>
@@ -56,7 +55,7 @@
 </head>
 <body>
     <?php
-        require "form/navbar.php";
+        require "../../require/navbar.php";
     ?>
 
     <div id="sup">
@@ -74,7 +73,7 @@
     </div>
 
     <?php
-        require "form/footer.php";
+        require "../../require/footer.php";
     ?>
 </body>
 </html>
