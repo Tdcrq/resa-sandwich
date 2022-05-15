@@ -109,6 +109,7 @@
                         echo "<p class='invalide'> Veuillez saisir une période cohérente </p>";
                         $erreurFiltre = false;
                     }
+                    header('Location: ./index.php');
                 }
             ?>
         </section>
@@ -174,7 +175,7 @@
                                         $passe = 'disabled';
                                     }
                                     echo "<td class='tableau'>
-                                        <a class='btnForm1 $passe' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
+                                        <a class='btnForm1 $passe' href='./action/modifierDate.php?id=".$resultat['id_com']. "' >Modifier </a>
                                         <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>";
                                     echo "</td>";
                                 echo "</tr>";
@@ -234,7 +235,7 @@
                                     echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
                                     echo "<td class='tableau'>". $annule ."</td>";
                                     echo "<td class='tableau'>
-                                        <a class='btnForm1' href='./action/modifierDAte.php?id=".$resultat['id_com']. "' >Modifier </a>
+                                        <a class='btnForm1' href='./action/modifierDate.php?id=".$resultat['id_com']. "' >Modifier </a>
                                         <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>
                                     </td>";
                                 echo "</tr>";
