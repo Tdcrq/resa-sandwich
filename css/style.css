@@ -1,0 +1,125 @@
+/* NAVBAR */
+.navbar-brand img
+{
+    width: 55%;
+}
+.navbar
+{
+    background-color: #191970;
+}
+
+.navbar-light .navbar-nav .nav-link
+{
+    color: white;
+}
+.navmarg
+{
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+/* FOOTER */
+.footer
+{
+    background-color: #191970;
+}
+
+.footer h6
+{
+    color: darkgoldenrod;
+}
+.bod
+{
+    padding-top: 5%;
+}
+
+.footer p
+{
+    color: white;
+}
+
+.copyright
+{
+    color: white;
+}
+
+/* Formulaire de connexion */ 
+.formconnbody 
+{
+    display: flex;
+    justify-content: center;
+}
+.contact 
+{
+    width: 50%;
+    margin-top: 11%;
+    margin-bottom: 11%;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 0 50px 0 50px;
+    background: white;
+}
+    
+.contact h1
+{
+    font-weight: 500;
+}
+    
+form div 
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 83px;
+    margin-top: 25px;
+}
+/*  affichage texte page d'accueil */
+.PAtitre
+{
+    text-align: center;
+
+}
+.PAtitre{
+    color: #191970;
+}
+.texte_accueil
+{
+    text-align: center;
+}
+
+/* boutons formulaires */
+.btnForm1 {
+    display:inline-block;
+    padding:0.3em 1.2em;
+    margin:1.5em 0 0.3em 0;
+    border-radius:2em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-weight:300;
+    color:#FFFFFF;
+    background-color:#191970;
+    transition: all 0.2s;
+}
+
+/* backoffice */
+
+.bo{
+    background-color: beige;
+}   
+
+textarea {
+    width: 370px;
+    height: 171px;
+}
+
+.afftxtflex{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.affimgflex{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
