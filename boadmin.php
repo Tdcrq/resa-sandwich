@@ -86,7 +86,7 @@
 <body class="bo">
     <header>
         <?php 
-            require('./require/navbar.php');
+            require('./require/navbar_admin.php');
         ?>
     </header>
     <div class="authentification">

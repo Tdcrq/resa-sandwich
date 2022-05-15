@@ -6,7 +6,7 @@
     session_start();// recup des var de session
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
-        header('Location: http://localhost/git/resa-sandwich/forms/form_conn.php');
+        header('Location: http://localhost/resa-sandwich/forms/form_conn.php');
         exit();
     }else{
         $nameUser = $_SESSION['name_user'];//recuperation du nameUser
@@ -115,7 +115,7 @@
             $query->bindParam('annule', $annuleCom);
             $query->execute();
 
-            header('Location: http://localhost/git/resa-sandwich/pages/reservation/confirm.php');
+            header('Location: http://localhost/resa-sandwich/pages/reservation/confirm.php');
             $_SESSION["sandwich"] = $sandwich;
             $_SESSION["boisson"] = $boisson;
             $_SESSION["dessert"] = $dessert;
@@ -285,5 +285,9 @@
             </form>
         </div>
     </section>
+    <footer>
+        <!-- FOOTER -->
+        <?php require "../../require/footer.php" ?>
+    </footer>
 </body>
 </html>

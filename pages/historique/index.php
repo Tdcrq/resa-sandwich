@@ -5,7 +5,7 @@
     session_start();
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
-        header('Location: http://localhost/git/resa-sandwich/forms/form_conn.php');
+        header('Location: http://localhost/resa-sandwich/forms/form_conn.php');
         exit();
     }
     $id = $_SESSION['id_user'];
@@ -73,7 +73,7 @@
             ?>
             <h1 class="titre"> Les commandes de <?php echo $nom_user ." ". $prenom_user; ?> </h1>
             <p class="description">
-                Toutes vos comandes qui sont invalidées par la cuisine seront <span class="invalide">rouge et en gras.</span>
+                Toutes vos commandes qui sont invalidées par la cuisine seront <span class="invalide">rouge et en gras.</span>
             </p>
             <p class="nbCommande">
                 Nombre de commande effectuée aujourd'hui : <span class="compteurCommande"> 0 </span>

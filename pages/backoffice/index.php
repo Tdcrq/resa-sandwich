@@ -68,7 +68,7 @@
 <body>
     <header>
         <?php 
-            require('../../require/navbar.php');
+            require('../../require/navbar_admin.php');
         ?>
     </header>
     <div id="flex">
@@ -109,7 +109,7 @@
                             echo"<td>".$row['prenom_user']."</td>";
                             echo"<td>".$row['active_user']."</td>";
                             echo "<td><form method='get' name='formulaire_delete/update'>
-                                        <a class='modif_a' name='delete' href='http://localhost/git/resa-sandwich/pages/backoffice/sup.php?id=".$row['id_user']. "' >suprimer </a> 
+                                        <a class='modif_a' name='delete' href='http://localhost/resa-sandwich/pages/backoffice/sup.php?id=".$row['id_user']. "' >suprimer </a> 
                                         <a class='modif_a' name='update' href='modif.php?id=".$row['id_user']. "' >modifier </a>
                                         </form>
                                 </td>";
