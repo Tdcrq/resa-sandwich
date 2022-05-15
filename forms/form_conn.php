@@ -51,8 +51,24 @@
             $_SESSION['id_user'] = $idUser;
             $_SESSION['name_user'] = $nameUser;
             
-            // on redirige l'utilisateur
-            header("Location: http://localhost/git/resa-sandwich/pages/reservation");
+            // recup du role de l'utilisateur
+            $reqDroit = $co->prepare('SELECT role_user FROM utilisateur WHERE email_user = :email');
+            $reqDroit->bindParam('email', $email);
+            $reqDroit->execute();
+            $droit = $reqDroit->fetchAll();
+            foreach($droit as $user_droit)
+            {
+                if($user_droit['role_user'] != 'a')
+                {
+                    $verif = true;
+                }
+            }
+
+            if($verif == true)
+            {
+                // on redirige l'utilisateur
+                header("Location: http://localhost/git/resa-sandwich/pages/reservation");
+            }else{ $messageErreur = "VOUS N'ÊTES PAS UN ELEVE"; }
         }else{
             // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
             // affiche un message d'erreur
@@ -90,6 +106,14 @@
                         <label for="mdp">Mot de passe</label>
                         <input type="text" id="mdp" name="mdp" placeholder="Mot de passe" required>
                     </div>
+
+                    <?php 
+                        if(isset($_POST['connexion']))
+                        {
+                            echo "<h1 class='fraude'> $messageErreur </h1>";
+                        }
+                    ?>
+
                     <div>
                         <input type="submit" id='submit' name="connexion" value='CONNEXION'class="btnForm1">
                     </div>

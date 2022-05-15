@@ -61,6 +61,12 @@ form div
     margin-top: -10%;
 }
 
+/* Message d'erreur */
+.fraude{
+    color: red;
+    text-align: center;
+}
+
 /* responsive image formulaire */
 @media screen and (max-width: 1258px){
     .bgform{
