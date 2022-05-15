@@ -1,3 +1,7 @@
+<?php
+    $_SESSION['form_inscription'] = true;
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,7 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
     <title>Projet FA</title>
-    <link rel="stylesheet" href="./css/styless.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/style_navbar_footer.css">
 </head>
 
 <body>
@@ -36,9 +41,9 @@
             </h4>
     <!-- menu affiché grâce au back office administrateur -->
             <?php
-                $aff = "SELECT lien_pdf FROM accueil";
+                // $aff = "SELECT lien_pdf FROM accueil";
                 $co = connexionBdd();
-                $acc = $co->prepare($aff);
+                $acc = $co->prepare("SELECT lien_pdf FROM accueil");
                 $acc->execute(); 
                 while($row = $acc->fetch()){
                     echo "<img src='".$row["lien_pdf"]."'";
