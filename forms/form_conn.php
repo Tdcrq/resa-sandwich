@@ -58,7 +58,7 @@
             $droit = $reqDroit->fetchAll();
             foreach($droit as $user_droit)
             {
-                if($user_droit['role_user'] != 'a' && $user['active_user'] == 1)
+                if($user_droit['role_user'] != 'a')
                 {
                     $verif = true;
                 }
@@ -67,7 +67,7 @@
             if($verif == true)
             {
                 // on redirige l'utilisateur
-                header("Location: http://localhost/resa-sandwich/pages/reservation");
+                header("Location: http://localhost/git/resa-sandwich/pages/reservation");
             }else{ $messageErreur = "Vous n'êtes pas/plus un élève"; }
         }else{
             // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui

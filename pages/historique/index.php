@@ -5,7 +5,7 @@
     session_start();
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
-        header('Location: http://localhost/resa-sandwich/forms/form_conn.php');
+        header('Location: http://localhost/git/resa-sandwich/forms/form_conn.php');
         exit();
     }
     $id = $_SESSION['id_user'];
@@ -56,7 +56,7 @@
         <!-- HEADER -->
         <header>
             <?php 
-                require('../../../require/navbar.php');
+                require('../../require/navbar.php');
             ?>
         </header>
         <section class="accueil textAlign">

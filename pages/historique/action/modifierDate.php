@@ -7,7 +7,7 @@
     {
         $id_com = $_GET['id'];
     }else{
-        header('Location: http://localhost/resa-sandwich/pages/historique');
+        header('Location: http://localhost/git/resa-sandwich/pages/historique');
         exit();
     }
     $reqCommande = $co->prepare("SELECT * FROM commande C, sandwich S, boisson B, dessert D WHERE C.id_com = :id AND C.fk_sandwich_id = S.id_sandwich AND C.fk_boisson_id = B.id_boisson AND C.fk_dessert_id = D.id_dessert");

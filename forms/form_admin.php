@@ -42,7 +42,7 @@ if (isset($_POST['connexion'])){
 
         
         // on redirige l'utilisateur
-        header("Location: http://localhost/resa-sandwich/pages/reservation");
+        header("Location: http://localhost/git/resa-sandwich/pages/reservation");
     }else{
         // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
         // affiche un message d'erreur
