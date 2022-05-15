@@ -6,13 +6,11 @@
     if(isset($_GET['id']))
     {
         $id_com = $_GET['id'];
+    }else{
+        header('Location: http://localhost/git/resa-sandwich/pages/historique');
+        exit();
     }
-    $reqCommande = $co->prepare('SELECT *
-    FROM commande C, sandwich S, boisson B, dessert D
-    WHERE C.id_com = :id
-    AND C.fk_sandwich_id = S.id_sandwich
-    AND C.fk_boisson_id = B.id_boisson
-    AND C.fk_dessert_id = D.id_dessert');
+    $reqCommande = $co->prepare("SELECT * FROM commande C, sandwich S, boisson B, dessert D WHERE C.id_com = :id AND C.fk_sandwich_id = S.id_sandwich AND C.fk_boisson_id = B.id_boisson AND C.fk_dessert_id = D.id_dessert");
     $reqCommande->bindParam('id', $id_com);
     $reqCommande->execute();
     $commande = $reqCommande->fetchAll();
@@ -21,7 +19,7 @@
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
     $sandwichErreur = $dessertErreur = $boissonErreur = $timeErreur = " ";
     $valid = true;
-    $heureLimite =  date("H:i",mktime(20, 30, 0, 0, 0, 0));
+    $heureLimite =  date("H:i",mktime(23, 30, 0, 0, 0, 0));
     $dto = new datetime();
     $timezone = new DateTimeZone('Europe/Paris');
     $dto->setTimezone($timezone);
@@ -33,20 +31,25 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Modifier date de livraison</title>
+        <!-- Lien Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
+        <!-- Lien CSS -->
         <link rel="stylesheet" href="./style/style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../../../css/style_navbar_footer.css">
     </head>
     <body>
         <!-- Header -->
-        <?php require "../../../require/header.php"; ?>
+        <?php require "../../../require/navbar.php"; ?>
 
         <div class = "formCon">
             <form method="post" id="sandForm">
                 <div class = "sbcCon" id="test">
                     <div class = "denreeCon">
                         <div class = "imgCon">
-                            <img src="../../reservation/finpro/Images/sandwich.png" alt="" srcset="">
+                            <img src="../../reservation/Images/sandwich.png" alt="" srcset="">
                             <p class = "nomDenree">Sandwich</p>
                         </div>
                         <select class ="selectStyle" name="sandwich" id="">
@@ -232,6 +235,7 @@
                 }
                 echo "<script> location.replace('../index.php'); </script>";
             }
+            require "../../../require/footer.php";
         ?>
     </body>
 </html>
