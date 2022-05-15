@@ -16,7 +16,7 @@
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
     $sandwichErreur = $dessertErreur = $boissonErreur = $timeErreur = " ";
     $valid = false;
-    $heureLimite =  date("H:i",mktime(20, 30, 0, 0, 0, 0));
+    $heureLimite =  date("H:i",mktime(23, 30, 0, 0, 0, 0));
     $dto = new datetime();
     $timezone = new DateTimeZone('Europe/Paris');
     $dto->setTimezone($timezone);
