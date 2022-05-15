@@ -1,9 +1,11 @@
 <?php
+
 // Permet d'appeler la fonction de connexion à la BD
 require('../DB/connexion.php');
 
 // Démarrage d'une session
 session_start();
+$_SESSION['form_inscription'] = false;
 
 // Connexion à la BD
 $co = connexionBdd();

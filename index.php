@@ -1,5 +1,6 @@
 <?php
     $_SESSION['form_inscription'] = true;
+    $_SESSION['form_connexion'] = true;
 ?>
 
 <!DOCTYPE html>

@@ -7,10 +7,6 @@
     {
         $id_com = $_GET['id'];
     }
-    if(!isset($_GET['id']))
-    {
-        $id_com = '3';
-    }
     $reqCommande = $co->prepare('SELECT *
     FROM commande C, sandwich S, boisson B, dessert D
     WHERE C.id_com = :id

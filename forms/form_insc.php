@@ -1,6 +1,10 @@
 <?php
+session_start();
+$_SESSION['form_inscription'] = false;
+$_SESSION['form_connexion'] = true;
+
 // Permet d'appeler la fonction de connexion à la BD
-require('../DB/connexion.php');
+require('../db/connexion.php');
 
 // Cas où le formulaire est validé
 if (isset($_POST['inscription'])){
@@ -43,26 +47,26 @@ if (isset($_POST['inscription'])){
         } else {
             echo ' le mot de passe doit contenir au moins 8 caractères, au moins 1 chiffre et au moins 1 caractère spécial ';
         }
-
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1." />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
     <title>Inscrivez-vous</title>
-    <link rel="stylesheet" href="./cssform/connn.css" />
+    <link rel="stylesheet" href="./cssforms/conn.css" />
+    <link rel="stylesheet" href="../css/style_navbar_footer.css" />
 </head>
 <body class="bgforminsc">
     <?php 
-        require('../require/navbarinsc.php');
+        require('../require/navbar.php');
     ?>
     <section class="formconnbody">
             <div class="contact">

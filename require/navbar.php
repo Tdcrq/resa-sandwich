@@ -5,7 +5,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+        <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="http://localhost/git/resa-sandwich/">Accueil</a>
                 </li>
@@ -16,17 +16,33 @@
                     <a class="nav-link" href="http://localhost/git/resa-sandwich/pages/historique">Historique</a>
                 </li>
             </ul>
-            <ul class="ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href=""> 
-                        <i class="fa-solid fa-right-to-bracket"></i> Se connecter
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href=""> 
-                        <i class="fa-solid fa-right-to-bracket"></i> Déconnexion
-                    </a>
-                </li>
+            <ul class="nav nav-pills ml-auto">
+                <?php
+                    if(!isset($_SESSION['id_user']) && $_SESSION['form_connexion'] == true)
+                    {
+                        echo "<li class='nav-item'>
+                            <a class='nav-link' href='http://localhost/git/resa-sandwich/forms/form_conn.php'> 
+                                <i class='fa-solid fa-right-to-bracket'></i> Se connecter
+                            </a>
+                        </li>";
+                    }
+                    if(isset($_SESSION['id_user']))
+                    {
+                        echo "<li class='nav-item'>
+                            <a class='nav-link' href='http://localhost/git/resa-sandwich/require/logout.php'> 
+                                <i class='fa-solid fa-right-to-bracket'></i> Déconnexion
+                            </a>
+                        </li>";
+                    }
+                    if($_SESSION['form_inscription'] == true)
+                    {
+                        echo "<li class='nav-item'>
+                            <a class='nav-link' href='http://localhost/git/resa-sandwich/forms/form_insc.php'> 
+                                <i class='fa-solid fa-right-to-bracket'></i> S'inscrire
+                            </a>
+                        </li>";
+                    }
+                ?>
             </ul>
         </div>
     </div>
