@@ -1,9 +1,17 @@
 <?php
     require("connexion.php");
 
-    session_start();
-
     $conn = connexionBD();
+
+    session_start();// recup des var de session
+    if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
+    {
+        header('Location: http://localhost/resa-sandwich-accueil/forms/form_conn.php');
+        exit();
+    }else{
+        $nameUser = $_SESSION['name_user'];//recuperation du nameUser
+        $idUser = $_SESSION['id_user'];//recuperation de l'idUser
+    }
 
     if(isset($_POST["non_sup"]))
     {

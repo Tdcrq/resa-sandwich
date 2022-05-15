@@ -1,10 +1,47 @@
 <?php
     require("connexion.php");
 
-    session_start();
-
     $conn = connexionBD();
+
+    session_start();// recup des var de session
+    if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
+    {
+        header('Location: http://localhost/resa-sandwich-accueil/backoffice/form_conn.php');
+        exit();
+    }else{
+        $nameUser = $_SESSION['name_user'];//recuperation du nameUser
+        $idUser = $_SESSION['id_user'];//recuperation de l'idUser
+    }
     
+    <?php
+    session_start(); // recuperation des vars de session
+    require('../db/connexion.php');
+    $co = connexionBdd();
+
+    if(isset($_GET['id']))// recuperation de l'id pour l'update
+    {
+        $id = $_GET['id']; // id dans la var
+        $query = $co->prepare('SELECT * from project WHERE id_project=:id');// recover information of the project with the id
+        $query->bindParam(':id', $id);
+        $query->execute();
+        $result = $query->fetch();// resultat dans un tableau
+    }
+
+    if(isset($_POST['yes']))
+    {
+        $query = $co->prepare('DELETE FROM project WHERE id_project=:id'); // prepare to delete the project yes btn is clicked
+        $query->bindParam(':id', $id);
+        $query->execute();
+        header('Location: admin.php'); // redirection vers la page index du backoffice
+    }
+
+    if(isset($_POST['no']))
+    {
+        header('Location: admin.php'); // redirection vers la page index du backoffice
+    }
+
+?>
+
     if(isset($_POST["delete"]))
     {
         header('Location: sup.php');
