@@ -18,13 +18,17 @@
             </ul>
             <ul class="nav nav-pills ml-auto">
                 <?php
-                    if(!isset($_SESSION['id_user']) && $_SESSION['form_connexion'] == true)
+                    if(!isset($_SESSION['id_user']) )
                     {
-                        echo "<li class='nav-item'>
-                            <a class='nav-link' href='http://localhost/git/resa-sandwich/forms/form_conn.php'> 
-                                <i class='fa-solid fa-right-to-bracket'></i> Se connecter
-                            </a>
-                        </li>";
+                        if($_SESSION['form_connexion'] == true)
+                        {
+                            echo "<li class='nav-item'>
+                                <a class='nav-link' href='http://localhost/git/resa-sandwich/forms/form_conn.php'> 
+                                    <i class='fa-solid fa-right-to-bracket'></i> Se connecter
+                                </a>
+                            </li>";
+                        }
+                        
                     }
                     if(isset($_SESSION['id_user']))
                     {
