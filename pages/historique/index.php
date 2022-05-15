@@ -50,7 +50,7 @@
     </head>
     <body>
         <!-- HEADER -->
-        <?php require "../../require/navbar.php" ?>
+        <?php require "../../require/navbar.php"; ?>
         <section class="accueil textAlign">
             <?php
                 $reqInfo = $co->prepare("SELECT * FROM utilisateur WHERE id_user = :id");
@@ -75,7 +75,7 @@
         <section class="textAlign" id="filtre">
             <?php 
                 $reqFiltre = $co->prepare("SELECT * FROM historique WHERE fk_user_id = :id");                
-                $reqFiltre->bindParam('id', $_SESSION['id']);
+                $reqFiltre->bindParam('id', $id);
                 $reqFiltre->execute();
                 $reqFiltre = $reqFiltre->fetch();
             ?>
@@ -102,7 +102,7 @@
                         $query->bindParam('dateDebut', $dateDebut);
                         $query->bindParam('dateFin', $dateFin);
                         $query->bindParam('dateInsertion', $date);
-                        $query->bindParam('id', $_SESSION['id']);
+                        $query->bindParam('id', $id);
                         $query->execute();
                         $filtre = "AND C.date_heure_livraison_com >= '$dateDebut' AND C.date_heure_livraison_com <= '$dateFin'";
                     } else {
@@ -118,35 +118,36 @@
                 <?php
                     if(!isset($_POST['submit']) or !$erreurFiltre)
                     {
-                        echo "
-                            <tr>
-                                <th class='th textAlign'> Sandwich </th>
-                                <th class='th textAlign'> Boisson </th>
-                                <th class='th textAlign'> Dessert </th>
-                                <th class='th textAlign'> Chips </th>
-                                <th class='th textAlign'> Date commande </th>
-                                <th class='th textAlign'> Date livraison </th>
-                                <th class='th textAlign'> Commande annulée </th>   
-                                <th class='th textAlign'> Actions </th>                
-                            </tr>";
                         // Select nom sandwich 
                         $reqAfficher = $co->prepare("
                             SELECT *
                             FROM commande C, sandwich S, boisson B, dessert D
-                            WHERE C.fk_user_id = 1
+                            WHERE C.fk_user_id = :id
                             AND C.fk_sandwich_id = S.id_sandwich
                             AND C.fk_boisson_id = B.id_boisson
                             AND C.fk_dessert_id = D.id_dessert
                             AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
                             ORDER BY C.date_heure_livraison_com");
+                        $reqAfficher->bindParam('id', $id);
                         $reqAfficher->bindParam('debutFiltre', $date_time_filtre_min[0]);
                         $reqAfficher->bindParam('finFiltre'  , $date_time_filtre_max[0]);
                         $reqAfficher->execute();
                         $afficher = $reqAfficher->fetchAll();
                         if(sizeof($afficher) == 0)
                         {
-                            echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
+                            echo "<h4> Vous n'avez aucune commande prévu entre le ". $reqFiltre['dateDebut_hist'] ." et le ". $reqFiltre['dateFin_hist'] .".</h4>";
                         } else {
+                            echo "
+                                <tr>
+                                    <th class='th textAlign'> Sandwich </th>
+                                    <th class='th textAlign'> Boisson </th>
+                                    <th class='th textAlign'> Dessert </th>
+                                    <th class='th textAlign'> Chips </th>
+                                    <th class='th textAlign'> Date commande </th>
+                                    <th class='th textAlign'> Date livraison </th>
+                                    <th class='th textAlign'> Commande annulée </th>   
+                                    <th class='th textAlign'> Actions </th>                
+                                </tr>";
                             foreach ($afficher as $resultat)
                             {
                                 if($resultat['chips_com'] == 1)
@@ -187,12 +188,13 @@
                         $reqAfficher = $co->prepare("
                             SELECT *
                             FROM commande C, sandwich S, boisson B, dessert D
-                            WHERE C.fk_user_id = 1
+                            WHERE C.fk_user_id = :id
                             AND C.fk_sandwich_id = S.id_sandwich
                             AND C.fk_boisson_id = B.id_boisson
                             AND C.fk_dessert_id = D.id_dessert
                             AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
                             ORDER BY C.date_heure_livraison_com");
+                        $reqAfficher->bindParam('id', $id);
                         $reqAfficher->bindParam('debutFiltre', $date_time_filtre_min[0]);
                         $reqAfficher->bindParam('finFiltre'  , $date_time_filtre_max[0]);
                         $reqAfficher->execute();
