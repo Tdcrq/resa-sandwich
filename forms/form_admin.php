@@ -14,13 +14,13 @@ if (isset($_POST['connexion'])){
     $email = $_POST['email'];
     $password = $_POST['mdp'];
 
-    $stmt = $co->prepare("SELECT password_user, active_user FROM utilisateur WHERE email_user = ?"); 
+    $stmt = $co->prepare("SELECT password_user, role_user FROM utilisateur WHERE email_user = ?"); 
     // on execute la requete
     $stmt->execute(array($email));
     // on va chercher récuperer les resultats
     $user = $stmt->fetch(); 
 
-    if((password_verify($password, $user['password_user'])) && $user['active_user'] == 1){ 
+    if((password_verify($password, $user['password_user'])) && $user['role_user'] == 'a'){ 
         // on recupere l'id de lutilisateur connecté
         $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
         $query->bindParam('email', $email);
@@ -28,52 +28,22 @@ if (isset($_POST['connexion'])){
         $idUser = $query->fetch();
         $idUser = $idUser[0];
 
-        $query = $co->prepare("SELECT `nom_user` FROM `utilisateur` WHERE `email_user` = :email");
+        $query = $co->prepare("SELECT `nom_user`, role_user FROM `utilisateur` WHERE `email_user` = :email");
         $query->bindParam('email', $email);
         $query->execute();
         $nameUser = $query->fetch();
-        $nameUser = $nameUser[0];
         // on démarre une session avec email_user , idUser ,nameUser
         $_SESSION['email_user'] = $email;
         $_SESSION['id_user'] = $idUser;
-        $_SESSION['name_user'] = $nameUser;
+        $_SESSION['name_user'] = $nameUser[0];
 
         
         // on redirige l'utilisateur
-        header("Location: http://localhost/resa-sandwich/pages/reservation");
+        header("Location: http://localhost/resa-sandwich/boadmin.php");
     }else{
         // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
         // affiche un message d'erreur
         $message = "email ou mot de passe incorrect.";
-        echo $message;
-    }
-
-    // On compte le nombre de lignes résultats de la requête
-    $rows = $query->rowCount();
-    if($rows){
-        // on démarre une session avec email_user
-        $_SESSION['email_user'] = $email;
-        // recup du role de l'utilisateur
-        $reqDroit = $co->prepare('SELECT role_user FROM utilisateur WHERE email_user = :email');
-        $reqDroit->bindParam('email', $email);
-        $reqDroit->execute();
-        $droit = $reqDroit->fetchAll();
-        foreach($droit as $user_droit)
-        {
-            if($user_droit['role_user'] == 'a')
-            {
-                $verif = true;
-            }
-        }
-
-        if($verif == true)
-        {
-            // on redirige l'utilisateur
-            header("Location: ../pages/backoffice");
-        }else{ echo "<h1 class='fraude'> VOUS N'ÊTES PAS UN ELEVE </h1>"; }
-    } else {
-        $message =' e-mail ou mot de passe incorrect';
-        echo $message;
     }
 }
 ?>
@@ -113,6 +83,9 @@ if (isset($_POST['connexion'])){
                         <label for="mdp">Mot de passe</label>
                         <input type="text" id="mdp" name="mdp" placeholder="Mot de passe" required>
                     </div>
+                    <?php
+                        echo "<h3 class='fraude'> $message </h3>";
+                    ?>
                     <div>
                         <input type="submit" id='submit' name="connexion" value='CONNEXION' class="btnForm1">
                     </div>

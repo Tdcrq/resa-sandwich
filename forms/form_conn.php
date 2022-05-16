@@ -13,26 +13,14 @@
 
         $email = $_POST['email'];
         $password = $_POST['mdp'];
-        $active = '1';
-
-        // Préparation de la requête
-        $query = $co->prepare('SELECT * FROM utilisateur WHERE email_user=:user and password_user=:mdp and active_user=:active');
-
-        // Association des paramètres aux variables/valeurs
-        $query->bindParam(':user', $email);
-        $query->bindParam(':mdp', $password);
-        $query->bindParam(':active', $active);
-
-        // Execution de la requête
-        $query->execute();    
         
-        $stmt = $co->prepare("SELECT password_user FROM utilisateur WHERE email_user = ?"); 
+        $stmt = $co->prepare("SELECT password_user, active_user, role_user FROM utilisateur WHERE email_user = ?"); 
         // on execute la requete
         $stmt->execute(array($email));
         // on va chercher récuperer les resultats
         $user = $stmt->fetch(); 
 
-        if((password_verify($password, $user['password_user'])) && $user_statut['active_user'] == 1){ 
+        if((password_verify($password, $user['password_user'])) && $user['active_user'] == 1 && $user['role_user'] != 'a'){ 
             // on recupere l'id de lutilisateur connecté
             $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
             $query->bindParam('email', $email);
@@ -49,32 +37,15 @@
             $_SESSION['email_user'] = $email;
             $_SESSION['id_user'] = $idUser;
             $_SESSION['name_user'] = $nameUser;
-            
-            // recup du role de l'utilisateur
-            $reqDroit = $co->prepare('SELECT role_user FROM utilisateur WHERE email_user = :email');
-            $reqDroit->bindParam('email', $email);
-            $reqDroit->execute();
-            $droit = $reqDroit->fetchAll();
-            foreach($droit as $user_statut)
-            {
-                if($user_statut['role_user'] != 'a')
-                {
-                    $verif = true;
-                }
-            }
 
-            if($verif == true)
-            {
-                // on redirige l'utilisateur
-                header("Location: http://localhost/resa-sandwich/pages/reservation");
-                $_SESSION['form_connexion'] = true;
-            }else{ $messageErreur = "Vous n'êtes pas/plus un élève"; }
-        }else{
-            // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
-            // affiche un message d'erreur
-            $message = "email ou mot de passe incorrect.";
-            echo $message;
+            $verif = true;
         }
+        if($verif == true)
+        {
+            // on redirige l'utilisateur
+            header("Location: http://localhost/resa-sandwich/pages/reservation");
+            $_SESSION['form_connexion'] = true;
+        }else{ $messageErreur = "Les identifiants saisies ne correspondent à aucun compte !"; }
     }
 ?>
 
@@ -117,7 +88,7 @@
                     <?php 
                         if(isset($_POST['connexion']))
                         {
-                            echo "<h1 class='fraude'> $messageErreur </h1>";
+                            echo "<h3 class='fraude'> $messageErreur </h3>";
                         }
                     ?>
 
@@ -128,10 +99,10 @@
                 <p>connectez-vous en tant qu'<a href=form_admin.php>administrateur </a></p>
             </div>
         </section>
-    	   <footer>
-        	<?php
-            require('../require/footer.php');
-        	?>
-    </footer>
+        <footer>
+            <?php
+                require('../require/footer.php');
+            ?>
+        </footer>
     </body>
 </html>

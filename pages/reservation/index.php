@@ -20,7 +20,6 @@
     $dto = new datetime();
     $timezone = new DateTimeZone('Europe/Paris');
     $dto->setTimezone($timezone);
-    session_start();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {

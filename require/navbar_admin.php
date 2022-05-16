@@ -18,7 +18,7 @@
                     <a class='nav-link' href='http://localhost/resa-sandwich/require/logout.php'> 
                         <i class='fa-solid fa-right-to-bracket'></i> Déconnexion
                     </a>
-                </li>;
+                </li>
             </ul>
         </div>
     </div>
