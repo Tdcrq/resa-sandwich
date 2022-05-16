@@ -6,7 +6,7 @@
     session_start();// recup des var de session
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
-        header('Location: http://localhost/resa-sandwich-accueil/forms/form_conn.php');
+        header('Location: http://localhost/resa-sandwich/forms/form_conn.php');
         exit();
     }else{
         $nameUser = $_SESSION['name_user'];//recuperation du nameUser

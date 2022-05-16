@@ -84,7 +84,7 @@
                     </div>
                     <div class = "denreeCon">
                         <div class = "imgCon">
-                            <img src="../../reservation/finpro/Images/coca.png" alt="" srcset="">
+                            <img src="../../reservation/Images/coca.png" alt="" srcset="">
                             <p class = "nomDenree">Boisson</p>
                         </div>
                         <select class ="selectStyle" name = "boisson" id="">
@@ -111,7 +111,7 @@
                     </div>
                     <div class = "denreeCon">
                         <div class = "imgCon">
-                            <img src="../../reservation/finpro/Images/dessert.png" alt="" srcset="">
+                            <img src="../../reservation/Images/dessert.png" alt="" srcset="">
                             <p class = "nomDenree">Dessert</p>
                         </div>
                         <select class ="selectStyle" name="dessert" id="">
@@ -140,7 +140,7 @@
                 <div class = "chipsheureCon">
                     <div class = "denreeCon">
                         <div class = "imgCon">
-                            <img src="../../reservation/finpro/Images/chips.png" alt="" srcset="">
+                            <img src="../../reservation/Images/chips.png" alt="" srcset="">
                             <p class = "nomDenree">Chips</p>
                         </div>
                         <div class = "chipsSelectCon">
@@ -212,10 +212,11 @@
                 $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
                 $heureLimiteL2 =  date("H:i",mktime(14, 30, 0, 0, 0, 0));
                 //vérification que le jour de livraison ne soit pas passé.
-                if ($date_livraison < $dto->format('Y-m-d'))
-                {
-                    $valid = false;
-                    $statutCommande = 'Vous ne pouvez pas commander pour un jour anterieure';
+                if($date == $dto->format('Y-m-d')){
+                    if ($dto->format('H:i') > $heureLimite){
+                        $valid = false;
+                        $statutCommande = "Heure limite pour commander : 9h30";
+                    }
                 }
                 //vérification que l'heure de livraison est comprise entre 12h30 et 14h30.
                 if ($time < $heureLimiteL || $time > $heureLimiteL2){

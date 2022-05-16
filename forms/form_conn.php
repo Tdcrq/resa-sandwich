@@ -4,7 +4,6 @@
 
     // Démarrage d'une session
     session_start();
-    $_SESSION['form_inscription'] = true;
     $_SESSION['form_connexion'] = false;
 
     // Connexion à la BD
@@ -33,7 +32,7 @@
         // on va chercher récuperer les resultats
         $user = $stmt->fetch(); 
 
-        if(password_verify($password, $user['password_user'])){ 
+        if((password_verify($password, $user['password_user'])) && $user_statut['active_user'] == 1){ 
             // on recupere l'id de lutilisateur connecté
             $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
             $query->bindParam('email', $email);
@@ -56,9 +55,9 @@
             $reqDroit->bindParam('email', $email);
             $reqDroit->execute();
             $droit = $reqDroit->fetchAll();
-            foreach($droit as $user_droit)
+            foreach($droit as $user_statut)
             {
-                if($user_droit['role_user'] != 'a')
+                if($user_statut['role_user'] != 'a')
                 {
                     $verif = true;
                 }
@@ -68,6 +67,7 @@
             {
                 // on redirige l'utilisateur
                 header("Location: http://localhost/resa-sandwich/pages/reservation");
+                $_SESSION['form_connexion'] = true;
             }else{ $messageErreur = "Vous n'êtes pas/plus un élève"; }
         }else{
             // Si la requête ne retourne rien, alors l'utilisateur ou mdp n'existe pas dans la BD, on lui
@@ -103,7 +103,7 @@
         </header>
         <section class="formconnbody">
             <div class="contact">
-                <h1>Connectez vous</h1>
+                <h1>Connectez-vous</h1>
                 <form action="" method="post">
                     <div>
                         <label for="nom">Adresse Mail</label>
@@ -128,5 +128,10 @@
                 <p>connectez-vous en tant qu'<a href=form_admin.php>administrateur </a></p>
             </div>
         </section>
+    	   <footer>
+        	<?php
+            require('../require/footer.php');
+        	?>
+    </footer>
     </body>
 </html>

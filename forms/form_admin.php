@@ -5,8 +5,6 @@ require('../db/connexion.php');
 
 // Démarrage d'une session
 session_start();
-$_SESSION['form_inscription'] = true;
-$_SESSION['form_connexion'] = true;
 
 // Connexion à la BD
 $co = connexionBdd();
@@ -16,13 +14,13 @@ if (isset($_POST['connexion'])){
     $email = $_POST['email'];
     $password = $_POST['mdp'];
 
-    $stmt = $co->prepare("SELECT password_user FROM utilisateur WHERE email_user = ?"); 
+    $stmt = $co->prepare("SELECT password_user, active_user FROM utilisateur WHERE email_user = ?"); 
     // on execute la requete
     $stmt->execute(array($email));
     // on va chercher récuperer les resultats
     $user = $stmt->fetch(); 
 
-    if(password_verify($password, $user['password_user'])){ 
+    if((password_verify($password, $user['password_user'])) && $user['active_user'] == 1){ 
         // on recupere l'id de lutilisateur connecté
         $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
         $query->bindParam('email', $email);
@@ -105,7 +103,7 @@ if (isset($_POST['connexion'])){
         </header>
         <section class="formconnbody">
             <div class="contact">
-                <h1>Connectez vous en tant qu'admin </h1>
+                <h1>Connectez-vous en tant qu'admin </h1>
                 <form action="" method="post">
                     <div>
                         <label for="nom">Adresse Mail</label>
@@ -121,5 +119,10 @@ if (isset($_POST['connexion'])){
                 </form>
             </div>
         </section>
+        <footer>
+            <?php
+                require('../require/footer.php');
+            ?>
+        </footer>
     </body>
 </html>

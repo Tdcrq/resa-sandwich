@@ -1,23 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="http://localhost/resa-sandwich/css/image/logo.png" alt="logo"></a>
+        <a class="navbar-brand" href="http://localhost/resa-sandwich/"><img src="http://localhost/resa-sandwich/css/image/logo.png" alt="logo"></a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav">
-                
-                
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="http://localhost/resa-sandwich/">Accueil</a>
+            <?php
+                if($_SESSION['form_connexion'] == true)
+                {
+                    echo "<li class='nav-item'>
+                    <a class='nav-link' href='http://localhost/resa-sandwich/'>Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://localhost/resa-sandwich/pages/reservation/">Commander</a>
+                <li class='nav-item'>
+                    <a class='nav-link' href='http://localhost/resa-sandwich/pages/reservation/'>Commander</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://localhost/resa-sandwich/pages/historique/">Historique</a>
-                </li>
+                <li class='nav-item'>
+                    <a class='nav-link' href='http://localhost/resa-sandwich/pages/historique/'>Historique</a>
+                </li>'";
+                }
+                        
+            ?>
         
                 
             </ul>
@@ -25,7 +28,7 @@
                 <?php
                     if(!isset($_SESSION['id_user']))
                     {
-                        if($_SESSION['form_connexion'] == true)
+                        if($_SESSION['form_connexion'] == false)
                         {
                             echo "<li class='nav-item'>
                                 <a class='nav-link' href='http://localhost/resa-sandwich/forms/form_conn.php'> 
@@ -35,7 +38,7 @@
                         }
                         
                     }
-                    if(isset($_SESSION['id_user']))
+                    if($_SESSION['form_connexion'] == true)
                     {
                         echo "<li class='nav-item'>
                             <a class='nav-link' href='http://localhost/resa-sandwich/require/logout.php'> 
@@ -43,7 +46,7 @@
                             </a>
                         </li>";
                     }
-                    if($_SESSION['form_inscription'] == true && !isset($_SESSION['id_user']))
+                    if($_SESSION['form_connexion'] == false)
                     {
                         echo "<li class='nav-item'>
                             <a class='nav-link' href='http://localhost/resa-sandwich/forms/form_insc.php'> 

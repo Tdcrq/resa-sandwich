@@ -26,7 +26,7 @@
     <!--récapitulatif de commande-->
     <div class = "con">
         <div class ="headercon">
-            <H1>Commande confirmé</H1>
+            <H1>Commande confirmée</H1>
         </div>
         <div class = "bodycon">
             <p>Votre sandwich : 
@@ -68,11 +68,11 @@
                     }; 
                 ?>
             </p>
-            <p>Jours de livraison : <?php echo $_SESSION["jdl"]; ?></p>
+            <p>Jour de livraison : <?php echo $_SESSION["jdl"]; ?></p>
             <p>Heure de livraison : <?php echo $_SESSION["heure"]; ?></p>
         </div>
         <div>
-            <button class="btnStyle" onclick="window.location.href='index.php';" >revenir a votre compte</button>
+            <button class="btnStyle" onclick="window.location.href='index.php';" >revenir à votre compte</button>
         </div>
     </div>
 

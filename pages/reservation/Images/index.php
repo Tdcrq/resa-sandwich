@@ -16,7 +16,7 @@
     $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
     $sandwichErreur = $dessertErreur = $boissonErreur = $timeErreur = " ";
     $valid = false;
-    $heureLimite =  date("H:i",mktime(9, 30, 0, 0, 0, 0));
+    $heureLimite =  date("H:i",mktime(20, 30, 0, 0, 0, 0));
     $dto = new datetime();
     $timezone = new DateTimeZone('Europe/Paris');
     $dto->setTimezone($timezone);
@@ -44,18 +44,13 @@
             $timeErreur = "N'oubliez pas de renseigner la date de livraison";
         }
 
+        //vérification que l'Utilisateur ne commande pas après 9h30.
+        if ($dto->format('H:i') > $heureLimite){
+            $valid = false;
+            $statutCommande = "Heure limite pour commander : 9h30";
+        }
         if (empty($_POST["date"]) || empty($_POST["heure"]) || empty($_POST["sandwich"]) || empty($_POST["dessert"]) || empty($_POST["boisson"])){
             $statutCommande = 'Veillez à bien selectionner tout les champs';
-        }
-        
-        //vérification que l'Utilisateur ne commande pas après 9h30 si cest le meme jour.
-        $time = $_POST["heure"];
-        $date = $_POST["date"];
-        if($date == $dto->format('Y-m-d')){
-            if ($dto->format('H:i') > $heureLimite){
-                $valid = false;
-                $statutCommande = "Heure limite pour commander : 9h30";
-            }
         }
           //fonction qui limite l'injection sql dans la value des selects
         function verifyInput($var)
@@ -70,6 +65,8 @@
             }
         }
 
+        $time = $_POST["heure"];
+        $date = $_POST["date"];
         $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
         $heureLimiteL2 =  date("H:i",mktime(14, 30, 0, 0, 0, 0));
         //vérification que le jour de livraison ne soit pas passé.
@@ -157,7 +154,7 @@
         ?>
     </header>
     <section class = "formSec">
-        <H2 id = "phraseCommande"><span id = "blueN"><?php $name = $nameUser ; echo " $name</span>, voulez-vous passer une commande aujourd'hui ?</H2>";?>
+        <H2 id = "phraseCommande"><span id = "blueN"><?php $name = $nameUser ; echo " $name</span>, Voulez-vous passer une commande aujourd'hui ?</H2>";?>
         <div class = "formCon">
             <form method="post" id="sandForm" role=form action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <div class = "sbcCon" id="test">

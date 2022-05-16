@@ -16,12 +16,12 @@
         $_SESSION = array();
         
         // Redirige vers la page de connexion
-        header("Location: ./index.php");
+        header("Location: https://groupe1.lyceestvincent.fr/");
     }
 
     if(!isset($_SESSION["email_user"]))
         {
-            header("Location:./forms/form_conn.php"); 
+            header("Location: https://groupe1.lyceestvincent.fr/"); 
             exit();  
         }
         //modification/ajout du texte sur la page d'accueil
@@ -35,13 +35,13 @@
         if($rows==0){
             $insert = "INSERT into accueil (texte_accueil) VALUES (:txt)";
             $ins = $co->prepare($insert);
-            $ins->bindValue(':txt', $_POST['textaccueil']);  
+            $ins->bindParam('txt', $_POST['textaccueil']);  
             $ins->execute();
 
         } elseif($rows==1){
             $modif = "UPDATE accueil SET texte_accueil=:modiftxt WHERE id_accueil = '".$_POST['modif']."'"; 
             $stmt = $co->prepare($modif);
-            $stmt->bindValue(':modiftxt', $_POST['textaccueil']);
+            $stmt->bindValue('modiftxt', $_POST['textaccueil']);
             $stmt->execute();
             }        
     }
@@ -111,7 +111,7 @@
                 ?>
                 </textarea>          
                 <div>
-                <button type="submit" name="modif" class="btnForm1">Ajout/Modification</button>
+                <button type="submit" name="modif" value="1" class="btnForm1">Ajout/Modification</button>
                 </div>
             </form>
         </div>
@@ -122,7 +122,7 @@
             <form method="post">
                 <h2>Affichage du menu en format pdf :</h2><input type="text" name="menupdf"></input>
                 <div>
-                    <button type="submit" name="sendpdf" value="0" class="btnForm1">Ajout/modification</button>      
+                    <button type="submit" name="sendpdf" value="1" class="btnForm1">Ajout/modification</button>      
                 </div>
                 <?php
                     $aff = "SELECT lien_pdf FROM accueil";

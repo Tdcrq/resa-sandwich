@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="http://localhost/resa-sandwich/css/image/logo.png" alt="logo"></a>
+        <a class="navbar-brand" href="http://localhost/resa-sandwich/"><img src="http://localhost/resa-sandwich/css/image/logo.png" alt="logo"></a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>

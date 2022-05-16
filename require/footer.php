@@ -24,10 +24,13 @@
                     <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                         <h6 class="text-uppercase">Accès rapide</h6>
                         <p>
-                            <a href="#!" class="refaccueil">Accueil</a>
+                            <a href="http://localhost/resa-sandwich/" class="refaccueil">Accueil</a>
                         </p>
                         <p>
-                            <a href="#!" class="refcommandes">Vos commandes</a>
+                            <a href="http://localhost/resa-sandwich/pages/reservation" class="refcommandes">Passer commande</a>
+                        </p>
+                        <p>
+                            <a href="http://localhost/resa-sandwich/pages/historique" class="refcommandes">Vos commandes</a>
                         </p>
                     </div>
                 </div>

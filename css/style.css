@@ -29,17 +29,21 @@ form div
     margin-top: 25px;
 }
 /*  affichage texte page d'accueil */
+
 .PAtitre
-{
+{	
+	margin-top: 150px;
     text-align: center;
+	color: #191970;
 
 }
-.PAtitre{
-    color: #191970;
-}
+
+
+
 .texte_accueil
 {
     text-align: center;
+    margin-bottom: 150px;
 }
 
 /* boutons formulaires */

@@ -1,6 +1,10 @@
 <?php
-    $_SESSION['form_inscription'] = true;
-    $_SESSION['form_connexion'] = true;
+    session_start();
+    if($_SESSION['form_connexion'] == true){
+        $_SESSION['form_connexion'] = true;
+    }else{
+        $_SESSION['form_connexion'] = false;
+    }
 ?>
 
 <!DOCTYPE html>

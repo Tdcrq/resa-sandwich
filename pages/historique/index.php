@@ -50,7 +50,7 @@
         <link rel="stylesheet" href="./style/style.css">
         <link rel="stylesheet" href="../../css/style_navbar_footer.css">
         <!-- font -->
-        <link rel="stylesheet" href="../../../css/style_font.css">
+        <link rel="stylesheet" href="../../css/style_font.css">
     </head>
     <body>
         <!-- HEADER -->
@@ -73,10 +73,10 @@
             ?>
             <h1 class="titre"> Les commandes de <?php echo $nom_user ." ". $prenom_user; ?> </h1>
             <p class="description">
-                Toutes vos commandes qui sont invalidées par la cuisine seront <span class="invalide">rouge et en gras.</span>
+                Toutes vos commandes qui sont invalidées par la cuisine seront <span class="invalide">rouges et en gras.</span>
             </p>
             <p class="nbCommande">
-                Nombre de commande effectuée aujourd'hui : <span class="compteurCommande"> 0 </span>
+                Nombres de commandes effectuées aujourd'hui : <span class="compteurCommande"> 0 </span>
             </p>
         </section>
 
