@@ -1,6 +1,6 @@
 <?php
+    //connexion bdd
     require "../../db/connexion.php";
-
     $conn = connexionBdd();
 
     session_start();// recup des var de session
@@ -33,7 +33,6 @@
         else
         {
             $id = $_GET['id'];
-
             $query = $conn->prepare('DELETE FROM utilisateur WHERE id_user = :id');
             $query->bindParam(':id' , $id);
             $query->execute();
@@ -77,8 +76,11 @@
         </form>
     </div>
 
-    <?php
-        require "../../require/footer.php";
-    ?>
+    <!-- Footer -->
+    <footer>
+            <?php 
+                require ("../../../require/footer.php");
+            ?>
+    </footer>
 </body>
 </html>

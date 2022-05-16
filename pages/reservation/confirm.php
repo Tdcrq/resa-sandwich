@@ -1,14 +1,15 @@
 <?php 
-    //récupération des variables
-    session_start();
-    require('../../db/connexion.php');
-    $co = connexionBdd();
+    //récupération des variables 
     $sandwich = $_SESSION["sandwich"];
     $boisson= $_SESSION["boisson"] ;
     $dessert = $_SESSION["dessert"];
     $chips = $_SESSION["chips"] ;
     $heure = $_SESSION["heure"];
     $date = $_SESSION["jdl"];
+    //démarrage session & connexion bdd
+    session_start();
+    require('../../db/connexion.php');
+    $co = connexionBdd();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,8 +18,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleconfirm.css">
     <title>Commande confirmé</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="styleconfirm.css">
     <!-- font -->
     <link rel="stylesheet" href="../../css/style_font.css">
 </head>

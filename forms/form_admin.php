@@ -92,6 +92,7 @@ if (isset($_POST['connexion'])){
                 </form>
             </div>
         </section>
+        <!--footer-->
         <footer>
             <?php
                 require('../require/footer.php');

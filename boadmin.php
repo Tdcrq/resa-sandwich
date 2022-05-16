@@ -1,12 +1,13 @@
 <?php
+    //recuperation des vars de session
     session_start();
     $email = $_SESSION["email_user"];
     $id = $_SESSION['id_user'];
     $_SESSION = array();
     $_SESSION['email_user'] = $email;
     $_SESSION['id_user'] = $id;
-
     
+    //connexion bdd
     require('./db/connexion.php');
     $co = connexionBdd();
 
@@ -14,17 +15,17 @@
     {
         // Détruit toutes les variables de session --> fermeture de session
         $_SESSION = array();
-        
         // Redirige vers la page de connexion
-        header("Location: https://groupe1.lyceestvincent.fr/");
+        header("Location: http://localhost/resa-sandwich/");
     }
 
     if(!isset($_SESSION["email_user"]))
-        {
-            header("Location: https://groupe1.lyceestvincent.fr/"); 
-            exit();  
-        }
-        //modification/ajout du texte sur la page d'accueil
+    {
+        header("Location: http://localhost/resa-sandwich/"); 
+        exit();  
+    }
+
+    //modification/ajout du texte sur la page d'accueil
     if(isset($_POST['modif'])){
         $txt = $_POST['textaccueil'];
         $query = $co->prepare('SELECT * FROM accueil');
@@ -37,13 +38,12 @@
             $ins = $co->prepare($insert);
             $ins->bindParam('txt', $_POST['textaccueil']);  
             $ins->execute();
-
-        } elseif($rows==1){
+        } elseif($rows==1) {
             $modif = "UPDATE accueil SET texte_accueil=:modiftxt WHERE id_accueil = '".$_POST['modif']."'"; 
             $stmt = $co->prepare($modif);
             $stmt->bindValue('modiftxt', $_POST['textaccueil']);
             $stmt->execute();
-            }        
+        }        
     }
     // affichage du menu
     if(isset($_POST['sendpdf'])){
@@ -59,7 +59,7 @@
             $ins->bindValue(':pdf', $_POST['menupdf']);  
             $ins->execute();
 
-        } else{
+        } else {
             $modif = "UPDATE accueil SET lien_pdf=? WHERE id_accueil = ?"; 
             $stmt = $co->prepare($modif);
             $stmt->execute(array($_POST['menupdf'],$_POST['sendpdf']));   
@@ -78,6 +78,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
     <title>backoffice administrateur</title>
+    <!-- Styles -->
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/style_navbar_footer.css">
     <!-- font -->
@@ -86,7 +87,7 @@
 <body class="bo">
     <header>
         <?php 
-            require('./require/navbar_admin.php')
+            require('./require/navbar_admin.php');
         ?>
     </header>
     <div class="authentification">

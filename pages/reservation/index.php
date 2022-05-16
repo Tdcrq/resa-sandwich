@@ -1,9 +1,9 @@
 <?php
-    //connection bdd
+    //connexion bdd
     require('../../db/connexion.php');
     $co = connexionBdd();
-
-    session_start();// recup des var de session
+    // recup des vars de session
+    session_start();
     if(!isset($_SESSION['id_user']))//verification que l'utilisateur est bien connecté
     {
         header('Location: http://localhost/resa-sandwich/forms/form_conn.php');
@@ -23,7 +23,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        //vérification que les variables ne sont pas vide et affichage des messages d'erreurs
+        //vérification que les variables ne sont pas vide et affichage des messages d'erreurs si elles le sont.
         $valid = true;
         if (empty($_POST["sandwich"])){
             $valid = false;
@@ -42,21 +42,20 @@
             $valid = false;
             $timeErreur = "N'oubliez pas de renseigner la date de livraison";
         }
-
         if (empty($_POST["date"]) || empty($_POST["heure"]) || empty($_POST["sandwich"]) || empty($_POST["dessert"]) || empty($_POST["boisson"])){
             $statutCommande = 'Veillez à bien selectionner tout les champs';
         }
         
-        //vérification que l'Utilisateur ne commande pas après 9h30 si cest le meme jour.
         $time = $_POST["heure"];
         $date = $_POST["date"];
+        //vérification que l'Utilisateur ne commande pas après 9h30 si cest le meme jour.
         if($date == $dto->format('Y-m-d')){
             if ($dto->format('H:i') > $heureLimite){
                 $valid = false;
-                $statutCommande = "Heure limite pour commander : 9h30";
+                $statutCommande = "Heure limite pour commander aujourd'hui: 9h30";
             }
         }
-          //fonction qui limite l'injection sql dans la value des selects
+        //fonction qui limite l'injection sql dans la value des selects
         function verifyInput($var)
         {
             $var = trim($var);
@@ -68,7 +67,7 @@
                 return false;
             }
         }
-
+        //création d'heure pour la condition suivante.
         $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
         $heureLimiteL2 =  date("H:i",mktime(14, 30, 0, 0, 0, 0));
         //vérification que le jour de livraison ne soit pas passé.
@@ -83,6 +82,7 @@
             $statutCommande = 'Vous pouvez pas vous faire livrer qu\'entre 12h30 et 14H30 ';
         }
     }
+
     if($valid == true)
     {
         //récupération saisie Utilisateur
@@ -116,8 +116,9 @@
             $query->bindParam('dateC', $dateR);
             $query->bindParam('annule', $annuleCom);
             $query->execute();
-
+            //redirection vers la page de confirmation
             header('Location: http://localhost/resa-sandwich/pages/reservation/confirm.php');
+            //passage des vars de commande grace a la session 
             $_SESSION["sandwich"] = $sandwich;
             $_SESSION["boisson"] = $boisson;
             $_SESSION["dessert"] = $dessert;
@@ -129,7 +130,6 @@
 ?>
 
 <!-- HTML -->
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -137,13 +137,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- Lien Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
     <link href="//db.onlinewebfonts.com/c/827d075b1538829cc0db75696e4d5fa2?family=Speedee" rel="stylesheet" type="text/css"/>
-
+    <!-- styles -->
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="../../css/style_navbar_footer.css">
     <!-- font -->

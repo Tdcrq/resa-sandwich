@@ -1,4 +1,5 @@
 <?php
+    //connexion bdd
     require "../../../db/connexion.php";
     $co = connexionBdd();
 
@@ -156,7 +157,9 @@
                                     if($chips_checked == '1')
                                     {
                                         echo 'checked';
-                                    } else{ echo 'disabled';}
+                                    } else { 
+                                        echo 'disabled';
+                                    }
                                 ?>>
                                 <label for="chipsO">Oui ?</label>
                             </div>
@@ -166,7 +169,9 @@
                                     if($chips_checked == '0')
                                     {
                                         echo 'checked';
-                                    } else{ echo 'disabled';}
+                                    } else { 
+                                        echo 'disabled';
+                                    }
                                 ?>>
                                 <label for="chipsN">Non.</label>
                             </div>
@@ -243,7 +248,12 @@
                 }
                 echo "<script> location.replace('../index.php'); </script>";
             }
-            require "../../../require/footer.php";
         ?>
+        <!-- Footer -->
+        <footer>
+            <?php 
+                require ("../../../require/footer.php");
+            ?>
+        </footer>
     </body>
 </html>

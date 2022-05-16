@@ -21,8 +21,6 @@
                 }
                         
             ?>
-        
-                
             </ul>
             <ul class="nav nav-pills ml-auto">
                 <?php

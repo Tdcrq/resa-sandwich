@@ -1,6 +1,6 @@
 <?php
+    //connexion bdd
     require("../../db/connexion.php");
-
     $conn = connexionBdd();
 
     session_start();// recup des var de session
@@ -146,8 +146,11 @@
         </div>
     </div>
     
-    <?php
-        require "../../require/footer.php";
-    ?>
+    <!-- Footer -->
+    <footer>
+            <?php 
+                require ("../../../require/footer.php");
+            ?>
+    </footer>
 </body>
 </html>

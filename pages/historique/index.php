@@ -1,4 +1,5 @@
-<?php 
+<?php
+    //connexion bdd
     require "../../db/connexion.php";
     $co = connexionBdd();
 
@@ -162,11 +163,15 @@
                                 if($resultat['chips_com'] == 1)
                                 {
                                     $chips = "oui";
-                                }else{ $chips = "non";}
+                                }else{ 
+                                    $chips = "non";
+                                }
                                 if($resultat['annule_com'] == 1)
                                 {
                                     $annule = "oui";
-                                }else{ $annule = "non";}
+                                }else{ 
+                                    $annule = "non";
+                                }
                                 echo "<tr>";
                                     echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
                                     echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
@@ -229,11 +234,15 @@
                                 if($resultat['chips_com'] == 1)
                                 {
                                     $chips = "oui";
-                                }else{ $chips = "non";}
+                                }else{ 
+                                    $chips = "non";
+                                }
                                 if($resultat['annule_com'] == 1)
                                 {
                                     $annule = "oui";
-                                }else{ $annule = "non";}
+                                }else{ 
+                                    $annule = "non";
+                                }
                                 echo "<tr>";
                                     echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
                                     echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
@@ -253,9 +262,12 @@
                 ?>
             </table>
         </section>
-
-        <!-- FOOTER -->
-        <?php require "../../require/footer.php" ?>
+        <!-- Footer -->
+        <footer>
+            <?php 
+                require ("../../../require/footer.php");
+            ?>
+        </footer>
     </body>
 </html>
 

@@ -1,4 +1,5 @@
 <?php
+    //Gestion de navbar
     session_start();
     if($_SESSION['form_connexion'] == true){
         $_SESSION['form_connexion'] = true;
@@ -19,6 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
     <title>Projet FA</title>
+    <!-- Styles -->
     <link rel="stylesheet" href="./css/style_navbar_footer.css">
     <link rel="stylesheet" href="./css/style.css" />
     <!-- font -->
@@ -44,7 +46,8 @@
                     $co = connexionBdd();
                     $acc = $co->prepare($aff);
                     $acc->execute(); 
-                    while($row = $acc->fetch()){
+                    while($row = $acc->fetch())
+                    {
                         echo $row['texte_accueil'];
                     }
                 ?>
@@ -55,14 +58,17 @@
                 $co = connexionBdd();
                 $acc = $co->prepare("SELECT lien_pdf FROM accueil");
                 $acc->execute(); 
-                while($row = $acc->fetch()){
+                while($row = $acc->fetch())
+                {
                     echo "<img src='".$row["lien_pdf"]."'";
                 }
             ?>
         </div>    
-        </section>
-    <?php 
-        require('./require/footer.php');
-    ?>
+    </section>
+    <footer>
+        <?php 
+            require('./require/footer.php');
+        ?>
+    </footer>
 </body>
 </html>

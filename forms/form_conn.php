@@ -1,5 +1,5 @@
 <?php
-// Permet d'appeler la fonction de connexion à la BD
+    // Permet d'appeler la fonction de connexion à la BD
     require('../db/connexion.php');
 
     // Démarrage d'une session
@@ -45,7 +45,9 @@
             // on redirige l'utilisateur
             header("Location: http://localhost/resa-sandwich/pages/reservation");
             $_SESSION['form_connexion'] = true;
-        }else{ $messageErreur = "Les identifiants saisies ne correspondent à aucun compte !"; }
+        }else{
+            $messageErreur = "Les identifiants saisies ne correspondent à aucun compte !"; 
+        }
     }
 ?>
 
@@ -99,6 +101,7 @@
                 <p>connectez-vous en tant qu'<a href=form_admin.php>administrateur </a></p>
             </div>
         </section>
+        <!--footer-->
         <footer>
             <?php
                 require('../require/footer.php');

@@ -1,88 +1,87 @@
 <?php
-session_start();
+    session_start();
+    // Permet d'appeler la fonction de connexion à la BD
+    require('../db/connexion.php');
 
-// Permet d'appeler la fonction de connexion à la BD
-require('../db/connexion.php');
+    // Cas où le formulaire est validé
+    if (isset($_POST['inscription'])){
+        // Tests si les 4 champs ont été remplis
+        if (isset($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['mdp'])){	
+            // Récupèration les 4 saisies du formulaire
+            $prenom = $_POST['prenom'];
+            $nom = $_POST['nom'];
+            $email = $_POST['email'];
+            $mdp = password_hash($_POST['mdp'], PASSWORD_ARGON2I);
+            
+            // Connexion à la BD
+            $co = connexionBdd();
 
-// Cas où le formulaire est validé
-if (isset($_POST['inscription'])){
-    // Tests si les 4 champs ont été remplis
-    if (isset($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['mdp'])){	
-        // Récupèration les 4 saisies du formulaire
-        $prenom = $_POST['prenom'];
-        $nom = $_POST['nom'];
-        $email = $_POST['email'];
-        $mdp = password_hash($_POST['mdp'], PASSWORD_ARGON2I);
-        
-        // Connexion à la BD
-        $co = connexionBdd();
+            // Préparation de la requête
+            $query = $co->prepare("INSERT into utilisateur (prenom_user, nom_user, email_user, password_user, role_user, active_user) VALUES (:prenom, :nom, :email, :mdp, 'b', 1)");
+            // Association des paramètres aux variables/valeurs
+            $query->bindParam(':prenom', $prenom);
+            $query->bindParam(':nom', $nom);
+            $query->bindParam(':email', $email);
+            $query->bindParam(':mdp', $mdp);
 
-        // Préparation de la requête
-        $query = $co->prepare("INSERT into utilisateur (prenom_user, nom_user, email_user, password_user, role_user, active_user) VALUES (:prenom, :nom, :email, :mdp, 'b', 1)");
-        // Association des paramètres aux variables/valeurs
-        $query->bindParam(':prenom', $prenom);
-        $query->bindParam(':nom', $nom);
-        $query->bindParam(':email', $email);
-        $query->bindParam(':mdp', $mdp);
+            $stmt = $co->prepare("SELECT * FROM utilisateur WHERE email_user=:email");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $user = $stmt->fetch();
+            $valid = true;
+            if ($user["email_user"] == $email) {
+                // email existe
+                $messageC = 'adresse e-mail déjà utilisée.';
+                $valid = false;
+            }
+            // vérification des conditions
+            if (preg_match("#[0-9]+#", $_POST['mdp'])){
+                /// Exécution de la requête 
+                if($valid == true){
+                    $messageC = "<div class='sucess'>
+                            <h3>Vous êtes inscrit avec succès.</h3>
+                            <p>Cliquez ici pour vous <a href='form_conn.php'>connecter</a></p>
+                            </div>";
+                    $query->execute();
+                    // recup id pour le $_SESSION
+                    $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
+                    $query->bindParam('email', $email);
+                    $query->execute();
+                    $idUser = $query->fetch();
+                    $_SESSION['id_user'] = $idUser[0];
+                    $id = $_SESSION['id_user'];
 
-	    $stmt = $co->prepare("SELECT * FROM utilisateur WHERE email_user=:email");
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $user = $stmt->fetch();
-		$valid = true;
-        if ($user["email_user"] == $email) {
-            // email existe
-            $messageC = 'adresse e-mail déjà utilisée.';
-			$valid = false;
-        }
-        // vérification des conditions
-        if (preg_match("#[0-9]+#", $_POST['mdp'])){
-            /// Exécution de la requête 
-            if($valid == true){
-                $messageC = "<div class='sucess'>
-						<h3>Vous êtes inscrit avec succès.</h3>
-						<p>Cliquez ici pour vous <a href='form_conn.php'>connecter</a></p>
-						</div>";
-                $query->execute();
-				// recup id pour le $_SESSION
-				$query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
-				$query->bindParam('email', $email);
-				$query->execute();
-				$idUser = $query->fetch();
-				$_SESSION['id_user'] = $idUser[0];
-				$id = $_SESSION['id_user'];
+                    if ($query) {	
+                        // Ajout d'un filtre par défaut
+                        $annee = date("Y");
+                        if(date('m') >= '09')
+                        {
+                            $annee += 1;
+                        }else{ 
+                            $annee -= 1;
+                        }
+                        $dateMin = $annee .'-09-01';
+                        $dateMax = $annee+1 .'-07-15';
 
-				if ($query) {	
-					// Ajout d'un filtre par défaut
-					$annee = date("Y");
-					if(date('m') >= '09')
-					{
-						$annee += 1;
-					}else{ $annee -= 1;}
-					$dateMin = $annee .'-09-01';
-					$dateMax = $annee+1 .'-07-15';
+                        $dto = new datetime();
+                        $timezone = new DateTimeZone('Europe/Paris');
+                        $dto->setTimezone($timezone);
+                        $aujourdhui = $dto->format('Y-m-d H:i:s');
 
-					$dto = new datetime();
-					$timezone = new DateTimeZone('Europe/Paris');
-					$dto->setTimezone($timezone);
-					$aujourdhui = $dto->format('Y-m-d H:i:s');
-
-					$reqfiltre = $co->prepare("INSERT INTO historique (dateDebut_hist, dateFin_hist, dateInsertion_hist, fk_user_id) VALUES (:dateDebut, :dateFin, :dto, :id_user)");
-					$reqfiltre->bindParam('dateDebut', $dateMin);
-					$reqfiltre->bindParam('dateFin', $dateMax);
-					$reqfiltre->bindParam('dto', $aujourdhui);
-					$reqfiltre->bindParam('id_user', $id);
-					$reqfiltre->execute();
-
-				}else {
-					echo ' le mot de passe doit contenir au moins 8 caractères, au moins 1 chiffre et au moins 1 caractère spécial ';
-				}	
-                $_SESSION = array();			
-			}
-
+                        $reqfiltre = $co->prepare("INSERT INTO historique (dateDebut_hist, dateFin_hist, dateInsertion_hist, fk_user_id) VALUES (:dateDebut, :dateFin, :dto, :id_user)");
+                        $reqfiltre->bindParam('dateDebut', $dateMin);
+                        $reqfiltre->bindParam('dateFin', $dateMax);
+                        $reqfiltre->bindParam('dto', $aujourdhui);
+                        $reqfiltre->bindParam('id_user', $id);
+                        $reqfiltre->execute();
+                    }else {
+                        echo ' le mot de passe doit contenir au moins 8 caractères, au moins 1 chiffre et au moins 1 caractère spécial ';
+                    }	
+                    $_SESSION = array();			
+                }
+            }
         }
     }
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -131,10 +130,10 @@ if (isset($_POST['inscription'])){
                     <input type="submit" id='submit' name="inscription" value='INSCRIPTION' class="btnForm1" >
                 </div>
             </form>
-            <p><?php echo $messageC  ;?></p>
+            <p><?php echo $messageC;?></p>
         </div>
     </section>
-
+    <!--footer-->
     <footer>
         <?php
             require('../require/footer.php');

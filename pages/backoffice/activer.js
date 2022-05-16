@@ -1,4 +1,4 @@
- function groupeForm(){ 
+function groupeForm(){ 
     var $groupeForm =  document.getElementById('groupeForm'); 
     $groupeForm.disabled = !$groupeForm.disabled; 
 }

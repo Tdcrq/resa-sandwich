@@ -38,7 +38,7 @@
         </section>
         <!-- Copyright -->
         <div class="copyright text-center p-3">
-            © 2022 Copyright: Armand DECORMEILLE / Tristan DUCROCQ / Loris DACA / Hugo PARAGEAUD
+            <p> © 2022 Copyright: Armand DECORMEILLE / Tristan DUCROCQ / Loris DACA / Hugo PARAGEAUD </p>
         </div>
     </section>
 </footer>
