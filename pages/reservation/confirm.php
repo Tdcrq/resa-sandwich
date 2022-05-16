@@ -1,4 +1,8 @@
 <?php 
+    //démarrage session & connexion bdd
+    session_start();
+    require('../../db/connexion.php');
+    $co = connexionBdd();
     //récupération des variables 
     $sandwich = $_SESSION["sandwich"];
     $boisson= $_SESSION["boisson"] ;
@@ -6,10 +10,6 @@
     $chips = $_SESSION["chips"] ;
     $heure = $_SESSION["heure"];
     $date = $_SESSION["jdl"];
-    //démarrage session & connexion bdd
-    session_start();
-    require('../../db/connexion.php');
-    $co = connexionBdd();
 ?>
 <!DOCTYPE html>
 <html lang="en">
