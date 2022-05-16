@@ -143,5 +143,11 @@
             <button type=submit name='deconnexion' class="btnForm1">DECONNEXION</button>
         </form>
     </div>
+    <!-- Footer -->
+    <footer>
+            <?php 
+                require "./require/footer.php";
+            ?>
+    </footer>
 </body>
 </html>

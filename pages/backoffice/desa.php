@@ -45,8 +45,10 @@
     <link rel="stylesheet" href="style/style.css">
     <!-- font -->
     <link rel="stylesheet" href="../../css/style_font.css">
+    <!-- Lien CSS -->
+    <link rel="stylesheet" href="../../css/style_navbar_footer.css">
     <script src="activer.js"></script>
-    <title>desa</title>
+    <title>Desa</title>
 </head>
 <body>
     <header>
@@ -149,7 +151,7 @@
     <!-- Footer -->
     <footer>
             <?php 
-                require ("../../../require/footer.php");
+                require ("../../require/footer.php");
             ?>
     </footer>
 </body>

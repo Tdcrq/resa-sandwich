@@ -265,7 +265,7 @@
         <!-- Footer -->
         <footer>
             <?php 
-                require ("../../../require/footer.php");
+                require "../../require/footer.php";
             ?>
         </footer>
     </body>
