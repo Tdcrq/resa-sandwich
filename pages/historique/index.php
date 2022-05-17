@@ -107,7 +107,7 @@
                     if($dateFin >= $dateDebut)
                     {
                         //  Mise à jour du filtre
-                        $query = $co->prepare("UPDATE `historique` SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin, dateInsertion_hist = :dateInsertion, fk_user_id = :id");                
+                        $query = $co->prepare("UPDATE `historique` SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin, dateInsertion_hist = :dateInsertion WHERE fk_user_id = :id");                
                         $query->bindParam('dateDebut', $dateDebut);
                         $query->bindParam('dateFin', $dateFin);
                         $query->bindParam('dateInsertion', $date);

@@ -206,9 +206,11 @@
                     $timeErreur = "N'oubliez pas de renseigner la date de livraison";
                 }
                 //vérification que l'Utilisateur ne commande pas après 9h30.
-                if ($dto->format('H:i') > $heureLimite){
-                    $valid = false;
-                    $statutCommande = "Heure limite pour commander : 9h30";
+                if($date == $dto->format('Y-m-d')){
+                    if ($dto->format('H:i') > $heureLimite){
+                        $valid = false;
+                        $statutCommande = "Heure limite pour commander : 9h30";
+                    }
                 }
                 if (empty($_POST["date"]) || empty($_POST["heure"]) || empty($_POST["sandwich"]) || empty($_POST["dessert"]) || empty($_POST["boisson"])){
                     $statutCommande = 'Veillez à bien selectionner tout les champs';
@@ -218,11 +220,10 @@
                 $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
                 $heureLimiteL2 =  date("H:i",mktime(14, 30, 0, 0, 0, 0));
                 //vérification que le jour de livraison ne soit pas passé.
-                if($date == $dto->format('Y-m-d')){
-                    if ($dto->format('H:i') > $heureLimite){
-                        $valid = false;
-                        $statutCommande = "Heure limite pour commander : 9h30";
-                    }
+                if ($date < $dto->format('Y-m-d'))
+                {
+                    $valid = false;
+                    $statutCommande = 'Vous ne pouvez pas commander pour un jour anterieure';
                 }
                 //vérification que l'heure de livraison est comprise entre 12h30 et 14h30.
                 if ($time < $heureLimiteL || $time > $heureLimiteL2){
