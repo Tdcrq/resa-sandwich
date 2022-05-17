@@ -132,165 +132,165 @@
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Lien Bootstrap -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
-    <link href="//db.onlinewebfonts.com/c/827d075b1538829cc0db75696e4d5fa2?family=Speedee" rel="stylesheet" type="text/css"/>
-    <!-- styles -->
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="../../css/style_navbar_footer.css">
-    <!-- font -->
-    <link rel="stylesheet" href="../../css/style_font.css">
-</head>
-<body>
-    <header>
-        <?php 
-            require('../../require/navbar.php');
-        ?>
-    </header>
-    <section class = "formSec">
-        <H2 id = "phraseCommande"><span id = "blueN"><?php $name = $nameUser ; echo " $name</span>, voulez-vous passer une commande aujourd'hui ?</H2>";?>
-        <div class = "formCon">
-            <form method="post" id="sandForm" role=form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                <div class = "sbcCon" id="test">
-                    <div class = "denreeCon">
-                        <div class = "imgCon">
-                            <img src="Images/sandwich.png" alt="" srcset="">
-                            <p class = "nomDenree">Sandwich</p>
-                        </div>
-                        <select class ="selectStyle" name="sandwich" id="">
-                            <option value="" disabled selected >Choisir</option>
-                            <!--Select sandwich-->
-                            <?php
-                                $query = $co->prepare('SELECT * FROM sandwich WHERE dispo_sandwich = 1');
-                                $query->execute();
-                                $result = $query->fetchall();
-                                foreach ($result as $row)
-                                {
-                                    echo "<option value='".$row['id_sandwich']."'>".$row['nom_sandwich']."</option>";                                
-                                }
-                            ?>
-                        </select>
-                        <p class ="comments">
-                            <!--Message indisponibilité sandwich-->
-                            <?php 
-                                echo $sandwichErreur;
-                                $query = $co->prepare('SELECT * FROM sandwich WHERE dispo_sandwich = 0');
-                                $query->execute();
-                                $result = $query->fetchall();
-                                foreach ($result as $row)
-                                {
-                                    echo ($row['nom_sandwich']." non disponible aujourd'hui.<br>");                                
-                                }
-                            ?>
-                        </p>
-                    </div>
-                    <div class = "denreeCon">
-                        <div class = "imgCon">
-                            <img src="Images/coca.png" alt="" srcset="">
-                            <p class = "nomDenree">Boisson</p>
-                        </div>
-                        <select class ="selectStyle" name = "boisson" id="">
-                            <!--Select boisson-->
-                            <option selected="selected" value = "" name = "disable" disabled>Choisir</option>
-                            <?php
-                                
-                                $query = $co->prepare('SELECT * FROM boisson WHERE dispo_boisson = 1');
-                                $query->execute();
-                                $result = $query->fetchall();
-                                foreach ($result as $row)
-                                {
-                                    echo "<option value='".$row['id_boisson']."'>".$row['nom_boisson']."</option>";                                
-                                }
-                            ?>
-                        </select>
-                        <!--Message indisponibilité boisson-->
-                        <p class ="comments">
-                            <?php 
-                                echo $boissonErreur; 
-                                $query = $co->prepare('SELECT * FROM boisson WHERE dispo_boisson = 0');
-                                $query->execute();
-                                $result = $query->fetchall();
-                                foreach ($result as $row)
-                                {
-                                    echo ($row['nom_boisson']." non disponible aujourd'hui.<br>");                                
-                                }
-                            ?>
-                        </p>
-                    </div>
-                    <div class = "denreeCon">
-                        <div class = "imgCon">
-                            <img src="Images/dessert.png" alt="" srcset="">
-                            <p class = "nomDenree">Dessert</p>
-                        </div>
-                        <select class ="selectStyle" name="dessert" id="">
-                            <!--Select dessert-->
-                            <option selected="selected" value = "" disabled>Choisir</option>
-                            <?php
-                                $query = $co->prepare('SELECT * FROM dessert WHERE dispo_dessert = 1');
-                                $query->execute();
-                                $result = $query->fetchall();
-                                foreach ($result as $row)
-                                {
-                                    echo "<option value='".$row['id_dessert']."'>".$row['nom_dessert']."</option>";                                
-                                }
-                            ?>
-                        </select>
-                        <!--Message indisponibilité dessert-->
-                        <p class ="comments">
-                            <?php
-                            echo $dessertErreur; 
-                            $query = $co->prepare('SELECT * FROM dessert WHERE dispo_dessert = 0');
-                                $query->execute();
-                                $result = $query->fetchall();
-                                foreach ($result as $row)
-                                {
-                                    echo ($row["nom_dessert"]." non disponible aujourd'hui.<br>");                                
-                                }
-                            ?>
-                        </p>
-                    </div>
-                </div>
-                <div class = "chipsheureCon">
-                    <div class = "denreeCon">
-                        <div class = "imgCon">
-                            <img src="Images/chips.png" alt="" srcset="">
-                            <p class = "nomDenree">Chips</p>
-                        </div>
-                        <div class = "chipsSelectCon">
-                            <div>
-                                <input type="radio" value = "1" name ="chipsR" id="chipsO"checked>
-                                <label for="chipsO">Oui ?</label>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Lien Bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
+        <link href="//db.onlinewebfonts.com/c/827d075b1538829cc0db75696e4d5fa2?family=Speedee" rel="stylesheet" type="text/css"/>
+        <!-- styles -->
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="../../css/style_navbar_footer.css">
+        <!-- font -->
+        <link rel="stylesheet" href="../../css/style_font.css">
+    </head>
+    <body>
+        <header>
+            <?php 
+                require('../../require/navbar.php');
+            ?>
+        </header>
+        <section class = "formSec">
+            <H2 id = "phraseCommande"><span id = "blueN"><?php $name = $nameUser ; echo " $name</span>, voulez-vous passer une commande aujourd'hui ?</H2>";?>
+            <div class = "formCon">
+                <form method="post" id="sandForm" role=form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                    <div class = "sbcCon" id="test">
+                        <div class = "denreeCon">
+                            <div class = "imgCon">
+                                <img src="Images/sandwich.png" alt="" srcset="">
+                                <p class = "nomDenree">Sandwich</p>
                             </div>
-                            <div>
-                                <input type="radio" value = "0" name ="chipsR" id="chipsN">
-                                <label for="chipsN">Non.</label>
+                            <select class ="selectStyle" name="sandwich" id="">
+                                <option value="" disabled selected >Choisir</option>
+                                <!--Select sandwich-->
+                                <?php
+                                    $query = $co->prepare('SELECT * FROM sandwich WHERE dispo_sandwich = 1');
+                                    $query->execute();
+                                    $result = $query->fetchall();
+                                    foreach ($result as $row)
+                                    {
+                                        echo "<option value='".$row['id_sandwich']."'>".$row['nom_sandwich']."</option>";                                
+                                    }
+                                ?>
+                            </select>
+                            <p class ="comments">
+                                <!--Message indisponibilité sandwich-->
+                                <?php 
+                                    echo $sandwichErreur;
+                                    $query = $co->prepare('SELECT * FROM sandwich WHERE dispo_sandwich = 0');
+                                    $query->execute();
+                                    $result = $query->fetchall();
+                                    foreach ($result as $row)
+                                    {
+                                        echo ($row['nom_sandwich']." non disponible aujourd'hui.<br>");                                
+                                    }
+                                ?>
+                            </p>
+                        </div>
+                        <div class = "denreeCon">
+                            <div class = "imgCon">
+                                <img src="Images/coca.png" alt="" srcset="">
+                                <p class = "nomDenree">Boisson</p>
                             </div>
+                            <select class ="selectStyle" name = "boisson" id="">
+                                <!--Select boisson-->
+                                <option selected="selected" value = "" name = "disable" disabled>Choisir</option>
+                                <?php
+                                    
+                                    $query = $co->prepare('SELECT * FROM boisson WHERE dispo_boisson = 1');
+                                    $query->execute();
+                                    $result = $query->fetchall();
+                                    foreach ($result as $row)
+                                    {
+                                        echo "<option value='".$row['id_boisson']."'>".$row['nom_boisson']."</option>";                                
+                                    }
+                                ?>
+                            </select>
+                            <!--Message indisponibilité boisson-->
+                            <p class ="comments">
+                                <?php 
+                                    echo $boissonErreur; 
+                                    $query = $co->prepare('SELECT * FROM boisson WHERE dispo_boisson = 0');
+                                    $query->execute();
+                                    $result = $query->fetchall();
+                                    foreach ($result as $row)
+                                    {
+                                        echo ($row['nom_boisson']." non disponible aujourd'hui.<br>");                                
+                                    }
+                                ?>
+                            </p>
+                        </div>
+                        <div class = "denreeCon">
+                            <div class = "imgCon">
+                                <img src="Images/dessert.png" alt="" srcset="">
+                                <p class = "nomDenree">Dessert</p>
+                            </div>
+                            <select class ="selectStyle" name="dessert" id="">
+                                <!--Select dessert-->
+                                <option selected="selected" value = "" disabled>Choisir</option>
+                                <?php
+                                    $query = $co->prepare('SELECT * FROM dessert WHERE dispo_dessert = 1');
+                                    $query->execute();
+                                    $result = $query->fetchall();
+                                    foreach ($result as $row)
+                                    {
+                                        echo "<option value='".$row['id_dessert']."'>".$row['nom_dessert']."</option>";                                
+                                    }
+                                ?>
+                            </select>
+                            <!--Message indisponibilité dessert-->
+                            <p class ="comments">
+                                <?php
+                                echo $dessertErreur; 
+                                $query = $co->prepare('SELECT * FROM dessert WHERE dispo_dessert = 0');
+                                    $query->execute();
+                                    $result = $query->fetchall();
+                                    foreach ($result as $row)
+                                    {
+                                        echo ($row["nom_dessert"]." non disponible aujourd'hui.<br>");                                
+                                    }
+                                ?>
+                            </p>
                         </div>
                     </div>
-                    <div class = "heureCon">
-                        <h3>Date et heure de livraison :</h3>
-                        <input type="date" value="<?php echo($dto->format('Y-m-d'));?>" min="<?php echo($dto->format('Y-m-d'));?>" name = "date">
-                        <input type="time" min="12:30" max="14:30" value ="12:30" name = "heure">
-                        <p class ="comments"><?php echo $timeErreur; ?></p>
-                        <input type="submit" name = "submit" id = "blue" class = "selectStyle" value = "Commander">
-                        <p class = "comments"><?php echo($statutCommande);?></p>
+                    <div class = "chipsheureCon">
+                        <div class = "denreeCon">
+                            <div class = "imgCon">
+                                <img src="Images/chips.png" alt="" srcset="">
+                                <p class = "nomDenree">Chips</p>
+                            </div>
+                            <div class = "chipsSelectCon">
+                                <div>
+                                    <input type="radio" value = "1" name ="chipsR" id="chipsO"checked>
+                                    <label for="chipsO">Oui ?</label>
+                                </div>
+                                <div>
+                                    <input type="radio" value = "0" name ="chipsR" id="chipsN">
+                                    <label for="chipsN">Non.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "heureCon">
+                            <h3>Date et heure de livraison :</h3>
+                            <input type="date" value="<?php echo($dto->format('Y-m-d'));?>" min="<?php echo($dto->format('Y-m-d'));?>" name = "date">
+                            <input type="time" min="12:30" max="14:30" value ="12:30" name = "heure">
+                            <p class ="comments"><?php echo $timeErreur; ?></p>
+                            <input type="submit" name = "submit" id = "blue" class = "selectStyle" value = "Commander">
+                            <p class = "comments"><?php echo($statutCommande);?></p>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-    </section>
-    <footer>
-        <!-- FOOTER -->
-        <?php require "../../require/footer.php" ?>
-    </footer>
-</body>
+                </form>
+            </div>
+        </section>
+        <footer>
+            <!-- FOOTER -->
+            <?php require "../../require/footer.php" ?>
+        </footer>
+    </body>
 </html>
