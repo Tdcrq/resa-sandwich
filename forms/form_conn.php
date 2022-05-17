@@ -85,7 +85,7 @@
                     </div>
                     <div>
                         <label for="mdp">Mot de passe</label>
-                        <input type="text" id="mdp" name="mdp" placeholder="Mot de passe" required>
+                        <input type="password" id="mdp" name="mdp" placeholder="Mot de passe" required>
                     </div>
 
                     <?php 
