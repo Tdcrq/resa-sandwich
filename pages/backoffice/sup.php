@@ -58,7 +58,8 @@
         <!-- Lien CSS -->
         <link rel="stylesheet" href="../../css/style_navbar_footer.css">
         <script src="activer.js"></script>
-        <title>sup</title>
+        <link rel="icon" type="image/png" href="../../css/image/logo.png" />
+        <title>Supprimer l'utilisateur</title>
     </head>
     <body>
         <header>

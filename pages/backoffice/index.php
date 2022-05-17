@@ -90,6 +90,7 @@
         <link rel="stylesheet" href="../../css/style_font.css">
         <!-- Lien JS activer l'ajout d'utilisateurs -->
         <script src="activer.js"></script>
+        <link rel="icon" type="image/png" href="../../css/image/logo.png" />
         <title>Gestion utilisateur</title>
     </head>
     <body>

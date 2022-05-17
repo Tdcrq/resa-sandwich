@@ -69,7 +69,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://kit.fontawesome.com/4f1414e4a5.js" crossorigin="anonymous"></script>
-        <title>backoffice administrateur</title>
+        <link rel="icon" type="image/png" href="./css/image/logo.png" />
+        <title>Backoffice administrateur</title>
         <!-- Styles -->
         <link rel="stylesheet" href="./css/style.css" />
         <link rel="stylesheet" href="./css/style_navbar_footer.css">

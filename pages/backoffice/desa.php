@@ -48,7 +48,8 @@
         <!-- Lien CSS -->
         <link rel="stylesheet" href="../../css/style_navbar_footer.css">
         <script src="activer.js"></script>
-        <title>Desa</title>
+        <link rel="icon" type="image/png" href="../../css/image/logo.png" />
+        <title>Désactiver l'utilisateur</title>
     </head>
     <body>
         <header>

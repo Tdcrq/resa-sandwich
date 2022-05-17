@@ -52,7 +52,8 @@
         <!-- font -->
         <link rel="stylesheet" href="../../css/style_font.css">
         <script src="activer.js"></script>
-        <title>modif</title>
+        <link rel="icon" type="image/png" href="../../css/image/logo.png" />
+        <title>Modifier l'utilisateur</title>
     </head>
     <body>
         <header>
