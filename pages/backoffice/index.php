@@ -41,6 +41,33 @@
         $query->bindParam(':mdp', $mdp);
         $query->bindParam(':actif', $actif);
         $query->execute();
+
+        // Ajout d'un filtre par défaut
+        $query = $conn->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
+        $query->bindParam('email', $eMail);
+        $query->execute();
+        $idUser = $query->fetch();
+        $id = $idUser[0];
+
+        $annee = date("Y");
+        if(date('m') >= '09')
+        {
+            $annee += 1;
+        }else{ 
+            $annee -= 1;
+        }
+        $dateMin = $annee .'-09-01';
+        $dateMax = $annee+1 .'-07-15';
+        $dto = new datetime();
+        $timezone = new DateTimeZone('Europe/Paris');
+        $dto->setTimezone($timezone);
+        $aujourdhui = $dto->format('Y-m-d H:i:s');
+        $reqfiltre = $conn->prepare("INSERT INTO historique (dateDebut_hist, dateFin_hist, dateInsertion_hist, fk_user_id) VALUES (:dateDebut, :dateFin, :dto, :id_user)");
+        $reqfiltre->bindParam('dateDebut', $dateMin);
+        $reqfiltre->bindParam('dateFin', $dateMax);
+        $reqfiltre->bindParam('dto', $aujourdhui);
+        $reqfiltre->bindParam('id_user', $id);
+        $reqfiltre->execute();
     }
 ?>
 
