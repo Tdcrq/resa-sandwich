@@ -12,10 +12,59 @@
     $id = $_SESSION['id_user'];
     $_SESSION['form_inscription'] = false;
 
+    
+    $reqInfo = $co->prepare("SELECT * FROM utilisateur WHERE id_user = :id");
+    $reqInfo->bindParam('id', $id);
+    $reqInfo->execute();
+    $info = $reqInfo->fetchAll();
+    foreach($info as $info_user)
+    {
+        $nom_user = $info_user['nom_user'];
+        $prenom_user = $info_user['prenom_user'];
+    }
+
     $annee = date("Y");
     if(date('m') >= '09')
     {
         $annee += 1;
+    }
+
+    if(isset($_POST['submit']))
+    {
+        $dateDebut = date($_POST['dateDebut']);
+        $dateFin = date($_POST['dateFin']);
+        $erreurFiltre = false;
+        if($dateFin >= $dateDebut)
+        {
+            //  Mise à jour du filtre
+            $query = $co->prepare("UPDATE `historique` SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin, dateInsertion_hist = :dateInsertion WHERE fk_user_id = :id");                
+            $query->bindParam('dateDebut', $dateDebut);
+            $query->bindParam('dateFin', $dateFin);
+            $query->bindParam('dateInsertion', $date);
+            $query->bindParam('id', $id);
+            $query->execute();
+        } else {
+            echo "<p class='invalide'> Veuillez saisir une période cohérente </p>";
+            $erreurFiltre = true;
+        }
+        header('Location: ./index.php');
+    }
+
+    // Supprimer le filtre
+    if(isset($_POST['ecrase']))
+    {
+        $dateDebut = strval($annee -1) ."-09-01";
+        $dateFin = strval($annee) ."-07-15";
+        var_dump($dateDebut);
+        var_dump($_SESSION);
+        var_dump($dateFin);
+        //  Requête pour écraser le filtre déjà en base
+        $query = $co->prepare("UPDATE historique SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin WHERE fk_user_id = :id");                
+        $query->bindParam('dateDebut', $dateDebut);
+        $query->bindParam('dateFin', $dateFin);
+        $query->bindParam('id', $id);
+        $query->execute();
+        header('Location: ./index.php');
     }
 
     $dto = new datetime();
@@ -29,9 +78,9 @@
     foreach($historique as $filtre)
     {
         $date_livraison = $filtre['dateDebut_hist'];
-        $date_time_filtre_min = explode(' ', $date_livraison);
+        $debutHist = explode(' ', $date_livraison);
         $date_livraison = $filtre['dateFin_hist'];
-        $date_time_filtre_max = explode(' ', $date_livraison);
+        $finHist = explode(' ', $date_livraison);
     }
 ?>
 <!DOCTYPE html>
@@ -61,17 +110,6 @@
             ?>
         </header>
         <section class="accueil textAlign">
-            <?php
-                $reqInfo = $co->prepare("SELECT * FROM utilisateur WHERE id_user = :id");
-                $reqInfo->bindParam('id', $id);
-                $reqInfo->execute();
-                $info = $reqInfo->fetchAll();
-                foreach($info as $info_user)
-                {
-                    $nom_user = $info_user['nom_user'];
-                    $prenom_user = $info_user['prenom_user'];
-                }
-            ?>
             <h1 class="titre"> Les commandes de <?php echo $nom_user ." ". $prenom_user; ?> </h1>
             <p class="description">
                 Toutes vos commandes qui sont invalidées par la cuisine seront <span class="invalide">rouges et en gras.</span>
@@ -83,7 +121,7 @@
 
         <section class="textAlign" id="filtre">
             <?php 
-                $reqFiltre = $co->prepare("SELECT * FROM historique WHERE fk_user_id = :id");                
+                $reqFiltre = $co->prepare("SELECT * FROM historique WHERE fk_user_id = :id");
                 $reqFiltre->bindParam('id', $id);
                 $reqFiltre->execute();
                 $reqFiltre = $reqFiltre->fetch();
@@ -91,36 +129,13 @@
             <form action="" method="post" name="formFiltre">
                 <div class="infoCommande">
                     <label for="dateDebut">Période du </label>
-                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -2;?>-09-01" name="dateDebut" class="saisieFiltre" value="<?php echo $reqFiltre['dateDebut_hist'];?>">
+                    <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-09-01" name="dateDebut" class="saisieFiltre" value="<?php echo $reqFiltre['dateDebut_hist'];?>">
                     <label for="dateFin">au </label>
                     <input type="date" max="<?php echo $annee;?>-07-15" min="<?php echo $annee -1;?>-01-01" name="dateFin" class="saisieFiltre" value="<?php echo $reqFiltre['dateFin_hist'];?>">
                 </div>
                 <input class="btnForm1 textAlign" type="submit" name="submit" value="Appliquer le filtre">
+                <input class="btnEcrase textAlign" type="submit" name="ecrase" value="Supprimer le filtre">
             </form>
-            <?php
-                $filtre = "";
-                if(isset($_POST['submit']))
-                {
-                    $dateDebut = date($_POST['dateDebut']);
-                    $dateFin = date($_POST['dateFin']);
-                    $erreurFiltre = true;
-                    if($dateFin >= $dateDebut)
-                    {
-                        //  Mise à jour du filtre
-                        $query = $co->prepare("UPDATE `historique` SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin, dateInsertion_hist = :dateInsertion WHERE fk_user_id = :id");                
-                        $query->bindParam('dateDebut', $dateDebut);
-                        $query->bindParam('dateFin', $dateFin);
-                        $query->bindParam('dateInsertion', $date);
-                        $query->bindParam('id', $id);
-                        $query->execute();
-                        $filtre = "AND C.date_heure_livraison_com >= '$dateDebut' AND C.date_heure_livraison_com <= '$dateFin'";
-                    } else {
-                        echo "<p class='invalide'> Veuillez saisir une période cohérente </p>";
-                        $erreurFiltre = false;
-                    }
-                    header('Location: ./index.php');
-                }
-            ?>
         </section>
 
         <section class="affichageIndex">
@@ -139,8 +154,8 @@
                             AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
                             ORDER BY C.date_heure_livraison_com");
                         $reqAfficher->bindParam('id', $id);
-                        $reqAfficher->bindParam('debutFiltre', $date_time_filtre_min[0]);
-                        $reqAfficher->bindParam('finFiltre'  , $date_time_filtre_max[0]);
+                        $reqAfficher->bindParam('debutFiltre', $debutHist[0]);
+                        $reqAfficher->bindParam('finFiltre'  , $finHist[0]);
                         $reqAfficher->execute();
                         $afficher = $reqAfficher->fetchAll();
                         if(sizeof($afficher) == 0)
@@ -195,7 +210,7 @@
                             }
                         }
                     }
-                    if(isset($_POST['submit']) and $erreurFiltre)
+                    if(isset($_POST['submit']))
                     {
                         
                         // Select nom sandwich 
@@ -209,8 +224,8 @@
                             AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
                             ORDER BY C.date_heure_livraison_com");
                         $reqAfficher->bindParam('id', $id);
-                        $reqAfficher->bindParam('debutFiltre', $date_time_filtre_min[0]);
-                        $reqAfficher->bindParam('finFiltre'  , $date_time_filtre_max[0]);
+                        $reqAfficher->bindParam('debutFiltre', $debutHist[0]);
+                        $reqAfficher->bindParam('finFiltre'  , $finHist[0]);
                         $reqAfficher->execute();
                         $afficher = $reqAfficher->fetchAll();
 
