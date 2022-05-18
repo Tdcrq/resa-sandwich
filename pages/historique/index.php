@@ -55,9 +55,6 @@
     {
         $dateDebut = strval($annee -1) ."-09-01";
         $dateFin = strval($annee) ."-07-15";
-        var_dump($dateDebut);
-        var_dump($_SESSION);
-        var_dump($dateFin);
         //  Requête pour écraser le filtre déjà en base
         $query = $co->prepare("UPDATE historique SET dateDebut_hist = :dateDebut, dateFin_hist = :dateFin WHERE fk_user_id = :id");                
         $query->bindParam('dateDebut', $dateDebut);
@@ -67,6 +64,7 @@
         header('Location: ./index.php');
     }
 
+    // Récupération de l'historique de l'utilisateur
     $dto = new datetime();
     $timezone = new DateTimeZone('Europe/Paris');
     $dto->setTimezone($timezone);
@@ -82,6 +80,36 @@
         $date_livraison = $filtre['dateFin_hist'];
         $finHist = explode(' ', $date_livraison);
     }
+
+    // Récupération des commandes de l'utilisateur
+    $reqAfficher = $co->prepare("
+                            SELECT *
+                            FROM commande C, sandwich S, boisson B, dessert D
+                            WHERE C.fk_user_id = :id
+                            AND C.fk_sandwich_id = S.id_sandwich
+                            AND C.fk_boisson_id = B.id_boisson
+                            AND C.fk_dessert_id = D.id_dessert
+                            AND C.date_heure_livraison_com >= :debutFiltre AND C.date_heure_livraison_com <= :finFiltre
+                            ORDER BY C.date_heure_livraison_com");
+    $reqAfficher->bindParam('id', $id);
+    $reqAfficher->bindParam('debutFiltre', $debutHist[0]);
+    $reqAfficher->bindParam('finFiltre'  , $finHist[0]);
+    $reqAfficher->execute();
+    $afficher = $reqAfficher->fetchAll();
+
+    // Récupération du nombre de livraison pour la date du jour
+    $dto = new datetime();
+    $timezone = new DateTimeZone('Europe/Paris');
+    $dto->setTimezone($timezone);
+    $heure_min = $dto->format('Y-m-d') . ' 00:00:01';
+    $heure_max = $dto->format('Y-m-d') . ' 23:59:59';
+    // requete pour récup le nb d'occurrence
+    $reqOccurrence = $co->prepare("SELECT COUNT(*) FROM commande WHERE fk_user_id = :id AND date_heure_livraison_com >= :heure_min AND date_heure_livraison_com <= :heure_max");
+    $reqOccurrence->bindParam('id', $id);
+    $reqOccurrence->bindParam('heure_min', $heure_min);
+    $reqOccurrence->bindParam('heure_max', $heure_max);
+    $reqOccurrence->execute();
+    $occurrence = $reqOccurrence->rowcount();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -107,6 +135,7 @@
         <header>
             <?php 
                 require('../../require/navbar.php');
+                
             ?>
         </header>
         <section class="accueil textAlign">
@@ -115,7 +144,7 @@
                 Toutes vos commandes qui sont invalidées par la cuisine seront <span class="invalide">rouges et en gras.</span>
             </p>
             <p class="nbCommande">
-                Nombres de commandes effectuées aujourd'hui : <span class="compteurCommande"> 0 </span>
+                Nombres de commandes à récupérer aujourd'hui : <span class="compteurCommande"> <?php echo $occurrence; ?> </span>
             </p>
         </section>
 
@@ -141,137 +170,53 @@
         <section class="affichageIndex">
             <table>
                 <?php
-                    if(!isset($_POST['submit']) or !$erreurFiltre)
+                    if(sizeof($afficher) == 0)
                     {
-                        // Select nom sandwich 
-                        $reqAfficher = $co->prepare("
-                            SELECT *
-                            FROM commande C, sandwich S, boisson B, dessert D
-                            WHERE C.fk_user_id = :id
-                            AND C.fk_sandwich_id = S.id_sandwich
-                            AND C.fk_boisson_id = B.id_boisson
-                            AND C.fk_dessert_id = D.id_dessert
-                            AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
-                            ORDER BY C.date_heure_livraison_com");
-                        $reqAfficher->bindParam('id', $id);
-                        $reqAfficher->bindParam('debutFiltre', $debutHist[0]);
-                        $reqAfficher->bindParam('finFiltre'  , $finHist[0]);
-                        $reqAfficher->execute();
-                        $afficher = $reqAfficher->fetchAll();
-                        if(sizeof($afficher) == 0)
+                        echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
+                    } else {
+                        echo "
+                        <tr>
+                            <th class='th textAlign'> Sandwich </th>
+                            <th class='th textAlign'> Boisson </th>
+                            <th class='th textAlign'> Dessert </th>
+                            <th class='th textAlign'> Chips </th>
+                            <th class='th textAlign'> Date commande </th>
+                            <th class='th textAlign'> Date livraison </th>
+                            <th class='th textAlign'> Commande annulée </th>   
+                            <th class='th textAlign'> Actions </th>                
+                        </tr>";
+                        foreach ($afficher as $resultat)
                         {
-                            echo "<h4> Vous n'avez aucune commande prévu entre le ". $reqFiltre['dateDebut_hist'] ." et le ". $reqFiltre['dateFin_hist'] .".</h4>";
-                        } else {
-                            echo "
-                                <tr>
-                                    <th class='th textAlign'> Sandwich </th>
-                                    <th class='th textAlign'> Boisson </th>
-                                    <th class='th textAlign'> Dessert </th>
-                                    <th class='th textAlign'> Chips </th>
-                                    <th class='th textAlign'> Date commande </th>
-                                    <th class='th textAlign'> Date livraison </th>
-                                    <th class='th textAlign'> Commande annulée </th>   
-                                    <th class='th textAlign'> Actions </th>                
-                                </tr>";
-                            foreach ($afficher as $resultat)
+                            if($resultat['chips_com'] == 1)
                             {
-                                if($resultat['chips_com'] == 1)
-                                {
-                                    $chips = "oui";
-                                }else{ 
-                                    $chips = "non";
-                                }
-                                if($resultat['annule_com'] == 1)
-                                {
-                                    $annule = "oui";
-                                }else{ 
-                                    $annule = "non";
-                                }
-                                echo "<tr>";
-                                    echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
-                                    echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
-                                    echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
-                                    echo "<td class='tableau'>". $chips ."</td>";
-                                    echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
-                                    echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
-                                    echo "<td class='tableau'>". $annule ."</td>";
-                                    $passe = "";
-                                    $date_livraison = $resultat['date_heure_livraison_com'];
-                                    $date_livraison = explode(' ', $date_livraison);
-                                    if($date_livraison[0] < $dto->format('Y-m-d'))
-                                    {
-                                        $passe = 'disabled';
-                                    }
-                                    echo "<td class='tableau'>
-                                        <a class='btnForm1 $passe' href='./action/modifierDate.php?id=".$resultat['id_com']. "' >Modifier </a>
-                                        <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>";
-                                    echo "</td>";
-                                echo "</tr>";
+                                $chips = "oui";
+                            }else{ 
+                                $chips = "non";
                             }
-                        }
-                    }
-                    if(isset($_POST['submit']))
-                    {
-                        
-                        // Select nom sandwich 
-                        $reqAfficher = $co->prepare("
-                            SELECT *
-                            FROM commande C, sandwich S, boisson B, dessert D
-                            WHERE C.fk_user_id = :id
-                            AND C.fk_sandwich_id = S.id_sandwich
-                            AND C.fk_boisson_id = B.id_boisson
-                            AND C.fk_dessert_id = D.id_dessert
-                            AND C.date_heure_livraison_com >= :debutFiltre AND date_heure_livraison_com <= :finFiltre
-                            ORDER BY C.date_heure_livraison_com");
-                        $reqAfficher->bindParam('id', $id);
-                        $reqAfficher->bindParam('debutFiltre', $debutHist[0]);
-                        $reqAfficher->bindParam('finFiltre'  , $finHist[0]);
-                        $reqAfficher->execute();
-                        $afficher = $reqAfficher->fetchAll();
-
-                        if(sizeof($afficher) == 0)
-                        {
-                            echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
-                        } else {
-                            echo "
-                            <tr>
-                                <th class='th textAlign'> Sandwich </th>
-                                <th class='th textAlign'> Boisson </th>
-                                <th class='th textAlign'> Dessert </th>
-                                <th class='th textAlign'> Chips </th>
-                                <th class='th textAlign'> Date commande </th>
-                                <th class='th textAlign'> Date livraison </th>
-                                <th class='th textAlign'> Commande annulée </th>   
-                                <th class='th textAlign'> Actions </th>                
-                            </tr>";
-                            foreach ($afficher as $resultat)
+                            if($resultat['annule_com'] == 1)
                             {
-                                if($resultat['chips_com'] == 1)
-                                {
-                                    $chips = "oui";
-                                }else{ 
-                                    $chips = "non";
-                                }
-                                if($resultat['annule_com'] == 1)
-                                {
-                                    $annule = "oui";
-                                }else{ 
-                                    $annule = "non";
-                                }
-                                echo "<tr>";
-                                    echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
-                                    echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
-                                    echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
-                                    echo "<td class='tableau'>". $chips ."</td>";
-                                    echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
-                                    echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
-                                    echo "<td class='tableau'>". $annule ."</td>";
-                                    echo "<td class='tableau'>
-                                        <a class='btnForm1' href='./action/modifierDate.php?id=".$resultat['id_com']. "' >Modifier </a>
-                                        <a class='btnForm1' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>
-                                    </td>";
-                                echo "</tr>";
+                                $annule = "oui";
+                            }else{ 
+                                $annule = "non";
                             }
+                            echo "<tr>";
+                                echo "<td class='tableau'>". $resultat['nom_sandwich'] ."</td>";
+                                echo "<td class='tableau'>". $resultat['nom_boisson'] ."</td>";
+                                echo "<td class='tableau'>". $resultat['nom_dessert'] ."</td>";
+                                echo "<td class='tableau'>". $chips ."</td>";
+                                echo "<td class='tableau'>". $resultat['date_heure_com'] ."</td>";
+                                echo "<td class='tableau'>". $resultat['date_heure_livraison_com'] ."</td>";
+                                echo "<td class='tableau'>". $annule ."</td>";
+                                $passe = "";
+                                if($resultat['date_heure_livraison_com'] < $dto->format('Y-m-d h:i:s') || $annule == 'oui')
+                                {
+                                    $passe = 'disabled';
+                                }
+                                echo "<td class='tableau'>
+                                    <a class='btnForm1 $passe' href='./action/modifierDate.php?id=".$resultat['id_com']. "' >Modifier </a>
+                                    <a class='btnForm1 $passe' href='./action/annulerCommande.php?id=".$resultat['id_com']. "' >Annuler </a>"."</td>
+                                </td>";
+                            echo "</tr>";
                         }
                     }
                 ?>
@@ -285,4 +230,3 @@
         </footer>
     </body>
 </html>
-
