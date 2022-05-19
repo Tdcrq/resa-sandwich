@@ -109,7 +109,7 @@
     $reqOccurrence->bindParam('heure_min', $heure_min);
     $reqOccurrence->bindParam('heure_max', $heure_max);
     $reqOccurrence->execute();
-    $occurrence = $reqOccurrence->rowcount();
+    $occurrence = $reqOccurrence->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -172,7 +172,7 @@
                 <?php
                     if(sizeof($afficher) == 0)
                     {
-                        echo "<h4> Vous n'avez aucune commande prévu entre le ". $dateDebut ." et le ". $dateFin .".</h4>";
+                        echo "<h4> Vous n'avez aucune commande prévu entre le ". $reqFiltre['dateDebut_hist'] ." et le ". $reqFiltre['dateFin_hist'] .".</h4>";
                     } else {
                         echo "
                         <tr>
