@@ -20,7 +20,7 @@
         // on va chercher récuperer les resultats
         $user = $stmt->fetch(); 
 
-        if((password_verify($password, $user['password_user'])) && $user['active_user'] == 1 && $user['role_user'] != 'a'){ 
+        if((password_verify($password, $user['password_user'])) && $user['role_user'] != 'a'){ 
             // on recupere l'id de lutilisateur connecté
             $query = $co->prepare("SELECT `id_user` FROM `utilisateur` WHERE `email_user` = :email");
             $query->bindParam('email', $email);
@@ -37,7 +37,7 @@
             $_SESSION['email_user'] = $email;
             $_SESSION['id_user'] = $idUser;
             $_SESSION['name_user'] = $nameUser;
-
+            $_SESSION['active_user'] = $user['active_user'];
             $verif = true;
         }
         if($verif == true)

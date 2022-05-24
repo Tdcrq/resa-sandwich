@@ -54,6 +54,10 @@
                 $valid = false;
                 $statutCommande = "Heure limite pour commander aujourd'hui: 9h30";
             }
+        }//vérification que le compte n'est pas désactivé
+        if($_SESSION['active_user'] == 0){
+            $valid = false;
+            $statutCommande = "Votre compte est désactivé";
         }
         //fonction qui limite l'injection sql dans la value des selects
         function verifyInput($var)
@@ -74,12 +78,12 @@
         if ($date < $dto->format('Y-m-d'))
         {
             $valid = false;
-            $statutCommande = 'Vous ne pouvez pas commander pour un jour anterieure';
+            $statutCommande = 'Vous ne pouvez pas commander pour un jour anterieur';
         }
         //vérification que l'heure de livraison est comprise entre 12h30 et 14h30.
         if ($time < $heureLimiteL || $time > $heureLimiteL2){
             $valid = false;
-            $statutCommande = 'Vous pouvez pas vous faire livrer qu\'entre 12h30 et 14H30 ';
+            $statutCommande = 'Vous ne pouvez vous faire livrer qu\'entre 12h30 et 14H30 ';
         }
     }
 
