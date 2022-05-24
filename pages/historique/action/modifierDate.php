@@ -17,7 +17,7 @@
     $commande = $reqCommande->fetchAll();
 
     // Déclaration des variables
-    $sandwich = $dessert = $boisson = $chips = $heure = $date = $statutCommande = " ";
+    $sandwich = $dessert = $boisson = $chips = $heure = $date_livraison = $statutCommande = " ";
     $sandwichErreur = $dessertErreur = $boissonErreur = $timeErreur = " ";
     $valid = true;
     $heureLimite =  date("H:i",mktime(9, 30, 0, 0, 0, 0));
@@ -206,7 +206,7 @@
                     $timeErreur = "N'oubliez pas de renseigner la date de livraison";
                 }
                 //vérification que l'Utilisateur ne commande pas après 9h30.
-                if($date == $dto->format('Y-m-d')){
+                if($date_livraison == $dto->format('Y-m-d')){
                     if ($dto->format('H:i') > $heureLimite){
                         $valid = false;
                         $statutCommande = "Heure limite pour commander : 9h30";
@@ -220,7 +220,7 @@
                 $heureLimiteL =  date("H:i",mktime(12, 30, 0, 0, 0, 0));
                 $heureLimiteL2 =  date("H:i",mktime(14, 30, 0, 0, 0, 0));
                 //vérification que le jour de livraison ne soit pas passé.
-                if ($date < $dto->format('Y-m-d'))
+                if ($date_livraison < $dto->format('Y-m-d'))
                 {
                     $valid = false;
                     $statutCommande = 'Vous ne pouvez pas commander pour un jour anterieure';
@@ -247,8 +247,13 @@
                         $req_date->bindParam('id', $id_com);
                         $exe_date = $req_date->execute();
                     }
-                }
-                echo "<script> location.replace('../index.php'); </script>";
+                    echo "aaa";
+                }else { 
+                    var_dump($valid);
+                    var_dump($date_livraison);
+                    var_dump($dto->format('Y-m-d'));
+                    echo "bbb"; }
+                    echo "<script> location.replace('../index.php'); </script>";
             }
         ?>
         <!-- Footer -->
