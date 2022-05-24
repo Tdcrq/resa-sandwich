@@ -22,19 +22,23 @@
     {
         $id = $_GET['id'];
         $query = $conn->prepare('SELECT COUNT(*) FROM commande WHERE fk_user_id = :id');
-        $query->bindParam(':id' , $id);
+        $query->bindParam('id' , $id);
         $query->execute();
-        $result = $query->fetch();
+        $result = $query->fetchColumn();
 
-        if($result[0] != 0)
+        if($result > 0)
         {
             header('Location: desa.php?id='.$_GET['id'].'');
         }
         else
         {
             $id = $_GET['id'];
+            // suppression de la dépendance de la table historique
+            $query = $conn->prepare('DELETE FROM historique WHERE fk_user_id = :id');
+            $query->bindParam('id' , $id);
+            $query->execute();
             $query = $conn->prepare('DELETE FROM utilisateur WHERE id_user = :id');
-            $query->bindParam(':id' , $id);
+            $query->bindParam('id' , $id);
             $query->execute();
             header('Location: index.php');
         }
